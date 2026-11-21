@@ -1,0 +1,2861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Utengule–Itimba Estate | Labor Register</title>
+<style>
+  :root{
+    --bark:#2b2118;
+    --coffee:#4a3221;
+    --coffee-light:#6b4a30;
+    --parchment:#f6f1e6;
+    --parchment-dark:#eee4cf;
+    --leaf:#3f6b3f;
+    --leaf-dark:#2c4d2c;
+    --leaf-light:#e6f0e1;
+    --cherry:#a5352c;
+    --gold:#b8863b;
+    --ink:#2a2420;
+    --line:#d8cbb0;
+    --white:#fffdf9;
+    --shadow:0 2px 8px rgba(43,33,24,0.12);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Aptos Display','Aptos','Calibri','Segoe UI',Arial,sans-serif;
+    background:
+      radial-gradient(circle at 10% 10%, #f0e7d2 0%, transparent 45%),
+      var(--parchment);
+    color:var(--ink);
+    min-height:100vh;
+  }
+  .app{max-width:1220px;margin:0 auto;padding:18px 18px 60px;}
+
+  header.top{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:16px;
+    padding:18px 22px;
+    background:linear-gradient(135deg,var(--bark),var(--coffee));
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    color:var(--parchment);
+    margin-bottom:16px;
+    flex-wrap:wrap;
+  }
+  header.top .brand{display:flex;align-items:center;gap:14px;}
+  header.top .mark{
+    width:46px;height:46px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #e7c07d, var(--gold) 60%, #7a531f 100%);
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;flex:none;
+    box-shadow:inset 0 0 0 2px rgba(0,0,0,0.15);
+  }
+  header.top h1{font-size:1.35rem;margin:0;letter-spacing:.3px;font-weight:700;}
+  header.top .sub{font-size:.78rem;opacity:.8;margin-top:2px;letter-spacing:.5px;text-transform:uppercase;}
+  header.top .stats{display:flex;gap:22px;font-size:.8rem;}
+  header.top .stats b{display:block;font-size:1.15rem;color:#f0d9a8;}
+
+  nav.tabs{
+    display:flex;gap:6px;flex-wrap:wrap;
+    margin-bottom:16px;
+    border-bottom:2px solid var(--line);
+    padding-bottom:0;
+  }
+  nav.tabs button{
+    font-family:inherit;
+    background:transparent;border:none;
+    padding:10px 16px;font-size:.92rem;font-weight:600;
+    color:#8a7860;cursor:pointer;
+    border-bottom:3px solid transparent;
+    transition:color .15s, border-color .15s;
+    letter-spacing:.2px;
+  }
+  nav.tabs button:hover{color:var(--coffee);}
+  nav.tabs button.active{color:var(--leaf-dark);border-bottom-color:var(--leaf);}
+
+  .panel{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:12px;
+    box-shadow:var(--shadow);
+    padding:22px;
+    margin-bottom:18px;
+  }
+  .panel h2{margin-top:0;font-size:1.15rem;color:var(--coffee);border-bottom:1px solid var(--line);padding-bottom:10px;}
+  .panel .hint{font-size:.82rem;color:#8a7860;margin-top:-6px;margin-bottom:16px;}
+
+  /* ---- Register form ---- */
+  .reg-grid{display:grid;grid-template-columns:180px 1fr;gap:14px 18px;align-items:start;max-width:640px;}
+  .reg-grid label{font-weight:700;color:var(--coffee);padding-top:9px;}
+  .field-input, select, input[type=date], input[type=text], input[type=number]{
+    font-family:inherit;font-size:.95rem;
+    padding:8px 10px;border:1.5px solid var(--line);border-radius:7px;
+    background:var(--parchment);color:var(--ink);width:100%;
+  }
+  .field-input:focus, select:focus, input:focus{outline:2px solid var(--leaf);outline-offset:1px;border-color:var(--leaf);}
+  .day-display{
+    padding:8px 10px;border-radius:7px;background:var(--leaf-light);
+    color:var(--leaf-dark);font-weight:700;display:inline-block;min-width:130px;
+  }
+  .salary-options{display:flex;flex-wrap:wrap;gap:10px;}
+  .salary-options label{
+    font-weight:600;color:var(--ink);padding:6px 12px;border:1.5px solid var(--line);
+    border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:6px;background:var(--parchment);
+  }
+  .salary-options input{width:auto;accent-color:var(--leaf);}
+  .salary-options label.checked{background:var(--leaf-light);border-color:var(--leaf);color:var(--leaf-dark);}
+  .worker-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;}
+  .chip{
+    display:inline-flex;align-items:center;gap:6px;
+    background:var(--leaf-light);color:var(--leaf-dark);font-weight:700;font-size:.82rem;
+    padding:5px 6px 5px 12px;border-radius:16px;border:1px solid #bcd8bc;
+  }
+  .chip-remove{
+    background:none;border:none;cursor:pointer;color:var(--cherry);font-weight:800;
+    font-size:1rem;line-height:1;padding:2px 6px;border-radius:50%;
+  }
+  .chip-remove:hover{background:rgba(165,53,44,0.12);}
+  .chip-empty{color:#8a7860;font-size:.8rem;font-style:italic;}
+  .plot-checklist{
+    border:1.5px solid var(--line);border-radius:7px;background:var(--parchment);
+    max-height:220px;overflow-y:auto;padding:8px;
+    display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;
+  }
+  .plot-checklist label{
+    display:flex;align-items:center;gap:6px;font-weight:500;color:var(--ink);
+    font-size:.85rem;padding:3px 4px;border-radius:4px;cursor:pointer;
+  }
+  .plot-checklist label:hover{background:var(--leaf-light);}
+  .plot-checklist input[type=checkbox]{width:auto;accent-color:var(--leaf);}
+  .plot-filter{margin-bottom:8px;}
+  .plot-selected-count{font-size:.78rem;color:var(--leaf-dark);font-weight:700;margin-top:6px;}
+  .btn-row{display:flex;gap:10px;margin-top:20px;}
+  button.primary{
+    font-family:inherit;font-weight:700;font-size:.95rem;cursor:pointer;
+    background:linear-gradient(135deg,var(--leaf),var(--leaf-dark));color:#fff;
+    border:none;padding:11px 22px;border-radius:8px;box-shadow:var(--shadow);
+  }
+  button.primary:hover{filter:brightness(1.08);}
+  button.secondary{
+    font-family:inherit;font-weight:700;font-size:.95rem;cursor:pointer;
+    background:var(--white);color:var(--coffee);border:1.5px solid var(--coffee-light);
+    padding:11px 22px;border-radius:8px;
+  }
+  button.secondary:hover{background:var(--parchment-dark);}
+  .msg{margin-top:12px;font-weight:700;font-size:.88rem;}
+  .msg.ok{color:var(--leaf-dark);}
+  .msg.err{color:var(--cherry);}
+
+  /* ---- tables ---- */
+  .table-wrap{overflow:auto;max-height:70vh;border:1px solid var(--line);border-radius:10px;}
+  table{border-collapse:collapse;width:100%;font-size:.82rem;}
+  th,td{padding:6px 9px;border:1px solid var(--line);text-align:center;white-space:nowrap;}
+  thead th{
+    position:sticky;top:0;background:var(--coffee);color:var(--parchment);
+    z-index:2;font-weight:700;
+  }
+  tbody tr:nth-child(even){background:#faf6ec;}
+  tbody tr:hover{background:var(--leaf-light);}
+  td.name-cell, th.name-cell{
+    position:sticky;left:0;background:var(--white);z-index:1;
+    text-align:left;font-weight:700;color:var(--coffee);min-width:170px;
+  }
+  thead th.name-cell{background:var(--coffee);color:var(--parchment);z-index:3;}
+  tbody tr:nth-child(even) td.name-cell{background:#faf6ec;}
+  td.amt{color:var(--leaf-dark);font-weight:700;background:#eef6ea;}
+  td.blank{color:#c9bfa9;}
+  td.off{background:#f8dede;}
+  th.off{background:var(--cherry) !important;}
+  td.holiday, th.holiday, td.name-cell.holiday{background:#e6d9f5 !important;color:#4a2c78;}
+  th.holiday{background:#6d3fa6 !important;color:#fff !important;}
+  td.total{background:var(--gold);color:#3a2a08;font-weight:800;}
+  th.total-h{background:var(--leaf-dark) !important;}
+  td.sig{background:#fbf3da;min-width:90px;}
+
+  .legend-off{background:#f8dede;color:var(--cherry);padding:1px 6px;border-radius:4px;font-weight:700;}
+  .legend-holiday{background:#e6d9f5;color:#4a2c78;padding:1px 6px;border-radius:4px;font-weight:700;}
+
+  .toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;}
+  .toolbar label{font-weight:700;color:var(--coffee);font-size:.85rem;}
+  .toolbar select, .toolbar input{width:auto;}
+  .range-toolbar{background:var(--parchment-dark);padding:10px 14px;border-radius:8px;}
+  .search-box{max-width:260px;}
+  .badge{
+    display:inline-block;background:var(--leaf-light);color:var(--leaf-dark);
+    padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:700;
+  }
+
+  /* ---- voucher / contract (teal ledger style) ---- */
+  .voucher{
+    --teal:#0e8f86;
+    border:2.5px solid var(--teal);border-radius:2px;padding:0;max-width:560px;margin:0 auto;
+    font-family:'Aptos Display','Aptos','Calibri','Segoe UI',Arial,sans-serif;color:#123;background:#fff;
+  }
+  .voucher .v-topbar{
+    display:flex;justify-content:space-between;align-items:center;
+    border-bottom:2px solid var(--teal);padding:6px 10px;
+  }
+  .voucher .v-tag{font-size:.72rem;font-weight:800;letter-spacing:1px;color:var(--teal);}
+  .voucher .v-boxes{display:flex;gap:6px;}
+  .voucher .v-box{
+    border:1.5px solid var(--teal);border-radius:2px;padding:3px 8px;font-size:.62rem;
+    font-weight:700;color:var(--teal);text-align:center;min-width:80px;
+  }
+  .voucher .v-box b{display:block;font-size:.8rem;color:#123;margin-top:2px;}
+  .voucher .v-head{
+    text-align:center;padding:10px;font-weight:800;letter-spacing:1.5px;font-size:1.15rem;
+    color:#123;border-bottom:2px solid var(--teal);
+  }
+  .v-row{display:grid;grid-template-columns:170px 1fr;border-bottom:1px solid var(--teal);}
+  .v-row > div{padding:7px 12px;font-size:.88rem;}
+  .v-row .k{font-weight:700;color:#123;}
+  .v-row .v{color:#0b3d91;font-weight:600;}
+  .v-work{
+    text-align:center;font-weight:800;color:#0d6e14;
+    padding:8px;border-bottom:2px solid var(--teal);letter-spacing:.5px;font-size:.95rem;
+  }
+  .v-row-2{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--teal);}
+  .v-row-2 > div{padding:7px 10px;border-right:1px solid var(--teal);font-size:.82rem;}
+  .v-row-2 > div:last-child{border-right:none;}
+  .v-row-2 .k{display:block;font-weight:700;color:#123;font-size:.72rem;text-transform:uppercase;letter-spacing:.4px;}
+  .v-row-2 .v{display:block;color:#0b3d91;font-weight:700;margin-top:2px;min-height:1.1em;}
+  .v-receipt{border-top:2px solid var(--teal);}
+  .v-receipt-title{
+    text-align:center;font-weight:800;padding:7px;background:#eafaf8;color:var(--teal);
+    letter-spacing:.4px;font-size:.85rem;border-bottom:1px solid var(--teal);
+  }
+  .v-approve{
+    padding:7px 10px;color:#a5352c;font-weight:800;font-size:.78rem;
+    display:flex;align-items:center;letter-spacing:.3px;
+  }
+
+
+  /* ---- multi-select dropdowns ---- */
+  .msel-trigger{
+    width:100%;display:flex;justify-content:space-between;align-items:center;
+    font-family:inherit;font-size:.95rem;font-weight:600;text-align:left;cursor:pointer;
+    padding:9px 12px;border:1.5px solid var(--line);border-radius:7px;background:var(--parchment);color:var(--ink);
+  }
+  .msel-trigger:hover{border-color:var(--leaf);}
+  .msel-panel{display:none;border:1.5px solid var(--leaf);border-radius:7px;background:var(--white);padding:8px;margin-top:6px;box-shadow:var(--shadow);}
+  .msel-panel.open{display:block;}
+  .msel-list{
+    max-height:230px;overflow-y:auto;margin:8px 0;display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;align-content:start;
+  }
+  .msel-list label{display:flex;align-items:center;gap:6px;font-weight:500;color:var(--ink);font-size:.85rem;padding:4px;border-radius:4px;cursor:pointer;}
+  .msel-list label:hover{background:var(--leaf-light);}
+  .msel-list input[type=checkbox]{width:auto;accent-color:var(--leaf);}
+  .msel-addnew{
+    grid-column:1 / -1;font-family:inherit;font-weight:700;cursor:pointer;text-align:left;
+    background:var(--leaf-light);color:var(--leaf-dark);border:1.5px dashed var(--leaf);border-radius:6px;padding:7px 10px;
+  }
+  .msel-actions{display:flex;justify-content:space-between;gap:8px;}
+  .msel-actions button{padding:6px 14px;font-size:.82rem;}
+  .scan-box{margin-top:10px;}
+  .scan-panel{display:none;margin-top:8px;}
+  .scan-panel.open{display:block;}
+  .scan-panel video{width:100%;max-width:340px;border-radius:8px;background:#000;display:block;margin-bottom:8px;}
+  .scan-panel .field-input{margin-top:8px;}
+
+  /* ---- worker ID cards (credit-card size 85.6 x 54 mm) ---- */
+  .id-grid{display:grid;grid-template-columns:repeat(2,85.6mm);gap:1mm;justify-content:center;}
+  .id-card{
+    width:85.6mm;height:54mm;border:0.3mm solid #4a3221;border-radius:2.5mm;overflow:hidden;background:#fff;color:#1b1b1b;
+    display:flex;flex-direction:column;box-sizing:border-box;
+  }
+  .idc-head{background:#4a3221;color:#fff;padding:1.6mm 3mm;line-height:1.15;}
+  .idc-head b{display:block;font-size:10.5pt;letter-spacing:.4pt;}
+  .idc-head span{display:block;font-size:6pt;letter-spacing:.5pt;color:#f0d9a8;}
+  .idc-body{flex:1;display:flex;align-items:center;gap:2.5mm;padding:2mm 3mm;}
+  .idc-photo{flex:none;width:20mm;height:25mm;border:0.3mm dashed #888;display:flex;align-items:center;justify-content:center;font-size:6pt;color:#999;letter-spacing:1px;}
+  .idc-info{flex:1;min-width:0;}
+  .idc-name{font-weight:800;font-size:11pt;line-height:1.15;word-break:break-word;}
+  .idc-id{font-weight:900;font-size:17pt;letter-spacing:1pt;color:#2c4d2c;margin-top:1.2mm;}
+  .idc-sub{font-size:6.5pt;color:#6b4a30;font-weight:700;text-transform:uppercase;letter-spacing:.5pt;}
+  .idc-qr{flex:none;width:23mm;height:23mm;}
+  .idc-qr svg{width:100%;height:100%;display:block;}
+  .idc-foot{background:#e6f0e1;color:#2c4d2c;font-size:5.8pt;font-weight:700;text-align:center;padding:1mm;letter-spacing:.3pt;}
+  .scan-instant{display:flex;gap:8px;align-items:flex-start;font-size:.85rem;color:var(--coffee);padding:8px;background:var(--leaf-light);border-radius:6px;}
+  .scan-instant input{width:auto;margin-top:3px;accent-color:var(--leaf);}
+  .scan-log-head{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:.85rem;color:var(--leaf-dark);}
+  .scan-log-head button{padding:4px 10px;font-size:.75rem;}
+  .scan-log-list{max-height:140px;overflow:auto;font-size:.82rem;border:1px solid var(--line);border-radius:6px;padding:6px 8px;margin-top:6px;background:var(--parchment);}
+  @media print{
+    .print-sheet.id-sheet{padding:0;}
+    .print-sheet .id-grid{width:100%;grid-template-columns:repeat(2,85.6mm);gap:1mm;}
+  }
+
+  /* ---- QR stickers (63.5 x 33.9 mm, 3 x 8 per A4) ---- */
+  .sticker-grid{display:grid;grid-template-columns:repeat(3,63.5mm);gap:0;justify-content:center;}
+  .qr-sticker{width:63.5mm;height:33.9mm;box-sizing:border-box;border:0.2mm dashed #999;display:flex;align-items:center;gap:3mm;padding:2.5mm;background:#fff;color:#000;overflow:hidden;}
+  .qr-sticker .qs-q{flex:none;width:26mm;height:26mm;}
+  .qr-sticker .qs-q svg{width:100%;height:100%;display:block;}
+  .qr-sticker .qs-t b{display:block;font-size:16pt;font-weight:900;letter-spacing:1pt;}
+  .qr-sticker .qs-t span{display:block;font-size:8.5pt;font-weight:700;line-height:1.2;word-break:break-word;}
+  @media print{
+    .print-sheet.sticker-sheet{padding:0;}
+    .print-sheet .sticker-grid{width:100%;grid-template-columns:repeat(3,63.5mm);}
+  }
+
+  .empty-state{padding:40px;text-align:center;color:#8a7860;}
+  .empty-state .big{font-size:2.4rem;}
+
+  #print-all-vouchers{display:none;}
+  /* three vouchers per printed sheet: group in .print-sheet, break after each group */
+  .print-sheet{padding:4mm 0;}
+  .print-sheet .voucher{margin-bottom:5mm;}
+  .print-sheet .voucher:last-child{margin-bottom:0;}
+
+  @media print{
+    @page{ size:A4; margin:8mm; }
+    nav.tabs, header.top, .toolbar, .no-print{display:none !important;}
+    .panel{box-shadow:none;border:none;padding:0;}
+    body{background:#fff;}
+    body.printing-all > .app{display:none !important;}
+    body.printing-all #print-all-vouchers{display:block !important;}
+    .print-sheet{page-break-after:always;}
+    .print-sheet:last-child{page-break-after:auto;}
+    .voucher{font-size:8.2px;max-width:100%;}
+    .voucher .v-topbar{padding:3px 8px;}
+    .voucher .v-tag{font-size:7px;}
+    .voucher .v-box{padding:2px 6px;font-size:6.5px;min-width:60px;}
+    .voucher .v-box b{font-size:8px;}
+    .voucher .v-head{font-size:11px;padding:5px;}
+    .v-row > div{padding:3px 8px;font-size:8.5px;}
+    .v-work{font-size:9px;padding:5px;}
+    .v-row-2 > div{padding:3px 8px;font-size:8px;}
+    .v-row-2 .k{font-size:6.5px;}
+    .v-row-2 .v{font-size:8.5px;margin-top:1px;}
+    .v-receipt-title{font-size:7.5px;padding:3px;}
+    .v-approve{font-size:7px;padding:3px 8px;}
+  }
+  @media (max-width:640px){
+    .reg-grid{grid-template-columns:1fr;}
+    .reg-grid label{padding-top:0;}
+    header.top{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+
+<script>
+
+
+const WORKERS = [["A-001", "Abigail Junior"], ["A-002", "Abdul Mfaume"], ["A-003", "Adrophina Cosmas"], ["A-004", "Adrian Suleiman"], ["A-005", "Adson Emmanuel"], ["A-006", "Adela Philpo"], ["A-007", "Agatha Morice"], ["A-008", "Agape Mashaka"], ["A-009", "Agness Exavery"], ["A-010", "Agness Mbass"], ["A-011", "Agness Helman"], ["A-012", "Alpha Andrew"], ["A-013", "Alex Mbisa"], ["A-014", "Ainuliwe Alan"], ["A-015", "Alvin Piares"], ["A-016", "Alpha Sankey"], ["A-017", "Alen Meshack"], ["A-018", "Aloyce Moluwa"], ["A-019", "Alfayo Seya"], ["A-020", "Amani Msoda"], ["A-021", "Alma Samwel"], ["A-022", "Amasha Thomas"], ["A-023", "Amina Hossea"], ["A-024", "Amina Jackson"], ["A-025", "Amos Kipingi"], ["A-026", "Amos Paulo"], ["A-027", "Anna Misheck"], ["A-028", "Aneth Fredy"], ["A-029", "Aneth Solomon"], ["A-030", "Angela Solas"], ["A-031", "Angelina Alison"], ["A-032", "Anifa Mponzi"], ["A-033", "Aneth Solomon"], ["A-034", "Anisia Farady"], ["A-035", "Anlis Fabian"], ["A-036", "Anna Haule"], ["A-037", "Anna Mwankefu"], ["A-038", "Anord Lusajo"], ["A-039", "Apolo Elia"], ["A-040", "Aron Manet"], ["A-041", "Assa Anderson"], ["A-042", "Asia Amos"], ["A-043", "Ashura Ndele"], ["A-044", "Asifiwe Christopher"], ["A-045", "Assa Digala"], ["A-046", "Athuman Shida"], ["A-047", "Atu Elia"], ["A-048", "Atupele Edwin"], ["A-049", "Atupele Sadaka"], ["A-050", "Atukuzwe Erasto"], ["A-051", "Aurelia Mgani"], ["A-052", "Avid Pastory"], ["A-053", "Ayubu Jaston"], ["A-054", "Azizi Patson"], ["A-055", "Adam Chalwe"], ["A-056", "Adamson Mwalyego"], ["A-057", "Agape Jackson"], ["A-058", "Agatha Onesmo"], ["A-059", "Agnes Huruma"], ["A-060", "Agu Malongo"], ["A-061", "Agustino Fredy"], ["A-062", "Agustino Robert"], ["A-063", "Agustino Sankwa"], ["A-064", "Ahazi Lucas"], ["A-065", "Ajuae Emanuel"], ["A-066", "Alan Ndele"], ["A-067", "Alen Julius"], ["A-068", "Ales Clemence"], ["A-069", "Alpha Willy"], ["A-070", "Alu Isaya"], ["A-071", "Amani James"], ["A-072", "Amani Sijali"], ["A-073", "Andreas Samwel"], ["A-074", "Anifa Solomon"], ["A-075", "Anna Bahati"], ["A-076", "Anna Kense"], ["A-077", "Asha Kayange"], ["A-078", "Asifiwe Andrea"], ["B-001", "Bahati Joseph"], ["B-002", "Bahati Mwakiwi"], ["B-003", "Bahati Maston"], ["B-004", "Baraka Amani"], ["B-005", "Baraka Jackson"], ["B-006", "Baraka John"], ["B-007", "Baraka Joseph"], ["B-008", "Baraka Juma"], ["B-009", "Baraka Seha"], ["B-010", "Baraka Watson"], ["B-011", "Barnaba Isack"], ["B-012", "Batholomayo Mwanswila"], ["B-013", "Batsoni Katila"], ["B-014", "Believe Aseli"], ["B-015", "Beatha Willy"], ["B-016", "Benjamin Steven"], ["B-017", "Besta Masasa"], ["B-018", "Betty Njenda"], ["B-019", "Bless Jerema"], ["B-020", "Bill Mbande"], ["B-021", "Bry Hazole"], ["B-022", "Boniface Kasanga"], ["B-023", "Boniface Samwel"], ["B-024", "Bryan Kasanga"], ["B-025", "Bryson Jeremiah"], ["B-026", "Bupe Nkembo"], ["B-027", "Bahati Simon"], ["B-028", "Baraka Sondas"], ["B-029", "Benadetha Mwashitete"], ["B-030", "Blandina Furaha"], ["B-031", "Boniface Daudi"], ["B-032", "Bruce Adam"], ["B-033", "Bupe Mwankenja"], ["C-001", "Casto Joel"], ["C-002", "Catherina Stiwati"], ["C-003", "Chimwa Kayange"], ["C-004", "Charles Jamson"], ["C-005", "Chinedu Angulile"], ["C-006", "Chris Kapangula"], ["C-007", "Christina Daimon"], ["C-008", "Christina Samson"], ["C-009", "Christina Jummanne"], ["C-010", "Christina Jackson"], ["C-011", "Christina Paulo"], ["C-012", "Christina Shupa"], ["C-013", "Christopha Amos"], ["C-014", "Christopher Hossea"], ["C-015", "Cloud Raphael"], ["C-016", "Coniface Richard"], ["C-017", "Cosmas Ben"], ["C-018", "Cosmas Gerald"], ["C-019", "Catherine Toss"], ["C-020", "Chanjila John"], ["C-021", "Christian Daniely"], ["C-022", "Christina Mwantoki"], ["D-001", "Daines Mbogela"], ["D-002", "Damesk Michael"], ["D-003", "Damian Marekani"], ["D-004", "Daimon Donald"], ["D-005", "Daniel George"], ["D-006", "Daniely Konga"], ["D-007", "Debora Kibona"], ["D-008", "Daniely Singoy"], ["D-009", "Debora Alimoja"], ["D-010", "Diana Jailo"], ["D-011", "Dickson Sem"], ["D-012", "Dishon Suleiman"], ["D-013", "Donarld Seme"], ["D-014", "Dora William"], ["D-015", "Dorcas Acklison"], ["D-016", "Dorcas Emmanuel"], ["D-017", "Dorotea Fabian"], ["D-018", "Dotto John"], ["D-019", "Durusia Philemon"], ["D-020", "Daniel Angolile"], ["D-021", "Deborah Kibona"], ["D-022", "Dorice Bruno"], ["E-001", "Edina Lackson"], ["E-002", "Edina Godfrey"], ["E-003", "Edna Hamala"], ["E-004", "Edson Naza"], ["E-005", "Edna Fabian"], ["E-006", "Elesia Mwankwasya"], ["E-007", "Elesia Mbuza"], ["E-008", "Elesia Ndele"], ["E-009", "Elia Ngwabila"], ["E-010", "Eliudi Jamson"], ["E-011", "Elias Ambindwile"], ["E-012", "Eliza Fredy"], ["E-013", "Eliza Joster"], ["E-014", "Elestina M/wema"], ["E-015", "Elizabeth Gabriel"], ["E-016", "Eliud Isack"], ["E-017", "Elizabeth Mbewa"], ["E-018", "Elizabeth Wilson"], ["E-019", "Emelia Elias"], ["E-020", "Emiliana Exavery"], ["E-021", "Emmakulata Johnas"], ["E-022", "Emmanuel Benedicto"], ["E-023", "Emmanuel John"], ["E-024", "Emmanuel Malongo"], ["E-025", "Emelda Stiwati"], ["E-026", "Emmanuel Ndimbwa"], ["E-027", "Emmanuel William"], ["E-028", "Emmy Fredy"], ["E-029", "Emmy Lamson"], ["E-030", "Emmy Seme"], ["E-031", "Enea Mbembela"], ["E-032", "Enes Mahenge"], ["E-033", "Enea Nicodem"], ["E-034", "Enetia Hamadi"], ["E-035", "Enisha Njenda"], ["E-036", "Enjoy Lemon"], ["E-037", "Enjoy Lalika"], ["E-038", "Erasto Juma"], ["E-039", "Eric Mwalusambo"], ["E-040", "Eshe Julius"], ["E-041", "Eric Simon"], ["E-042", "Ester Joel"], ["E-043", "Ester Lazaro"], ["E-044", "Ester Njate"], ["E-045", "Ester Samwel"], ["E-046", "Ester Willy"], ["E-047", "Ever Didas"], ["E-048", "Ever Lamson"], ["E-049", "Ever Mwangwale"], ["E-050", "Evance Patrick"], ["E-051", "Ezania Mambwe"], ["E-052", "Ezekiel Ngailo"], ["E-053", "Ezekiel Peter"], ["E-054", "Eden Reubern"], ["E-055", "Edina Mwasomola"], ["E-056", "Edson Barton"], ["E-057", "Edson Ezekiel"], ["E-058", "Elesia Mwenzya"], ["E-059", "Elina Mwislam"], ["E-060", "Eliza Kesy"], ["E-061", "Eliza Taison"], ["E-062", "Elizabeth Babu"], ["E-063", "Elizabeth Michael"], ["E-064", "Emelda Clemence"], ["E-065", "Emmanuel Mtambo"], ["E-066", "Enes Anthony"], ["E-067", "Enetia Evance"], ["E-068", "Ephraim Luka"], ["E-069", "Essau Jotham"], ["E-070", "Ester George"], ["E-071", "Ester Laurent"], ["E-072", "Ester Tamasenti"], ["E-073", "Evana Sadock"], ["E-074", "Exaud Mpyera"], ["F-001", "Fadhili Kapinga"], ["F-002", "Fane Ephraim"], ["F-003", "Faida Mpangala"], ["F-004", "Farida Alan"], ["F-005", "Farida Mboleka"], ["F-006", "Fatma Waya"], ["F-007", "Fatuma Hassan"], ["F-008", "Faustina Nkosya"], ["F-009", "Faustina Hazole"], ["F-010", "Faustina Zabron"], ["F-011", "Felister Paulo"], ["F-012", "Fenard Mbwiga"], ["F-013", "Fetina Ajua"], ["F-014", "Flora Mwalingo"], ["F-015", "Fiada Festo"], ["F-016", "Fraia Watson"], ["F-017", "Frank Almas"], ["F-018", "Frank Simon"], ["F-019", "Fransis Lucas"], ["F-020", "Fransis Bhuja"], ["F-021", "Fransis Emmanuel"], ["F-022", "Fredrick Damian"], ["F-023", "Fredy Makoma"], ["F-024", "Frola Mbwiga"], ["F-025", "Frola Mdewa"], ["F-026", "Frola Mwalyego"], ["F-027", "Frola Janton"], ["F-028", "Furaha George"], ["F-029", "Faraja Daimon"], ["F-030", "Faraji Furaha"], ["F-031", "Fausta John"], ["F-032", "Faustina Masabuda"], ["F-033", "Festo Lambazan"], ["F-034", "Frans Luka"], ["F-035", "Frola Yusuph"], ["G-001", "Gabriel Joseph"], ["G-002", "Gadiel Sanga"], ["G-003", "Gamalieli Elia"], ["G-004", "George Gondwe"], ["G-005", "Getrude Nkanyanya"], ["G-006", "Gift Shadrack"], ["G-007", "George Ndisa"], ["G-008", "Glad Wilson"], ["G-009", "Gland Mwakapala"], ["G-010", "Gloria Kasanga"], ["G-011", "Godwin Mwakafwila"], ["G-012", "Goodluck Mwanginde"], ["G-013", "Grace Bryson"], ["G-014", "Grace Jeremiah"], ["G-015", "Grentina Miston"], ["G-016", "Geophrey Yohna"], ["G-017", "Gibson Paulo"], ["G-018", "Gift Simkoko"], ["G-019", "Glad John"], ["G-020", "Glad Johnas"], ["G-021", "Glad Mwakapala"], ["G-022", "Goodluck Elia"], ["G-023", "Goodluck Mwangindo"], ["G-024", "Grace Watson"], ["G-025", "Grister Ean"], ["H-001", "Haghai Mtafya"], ["H-002", "Halima Mongomongo"], ["H-003", "Hance Yingi"], ["H-004", "Hapendeki Nelson"], ["H-005", "Happines Isack"], ["H-006", "Happy King"], ["H-007", "Happy Mbogela"], ["H-008", "Haruni Alan"], ["H-009", "Hassan Alison"], ["H-010", "Hellen Isack"], ["H-011", "Hellena Mwalyego"], ["H-012", "Hidaya Abas"], ["H-013", "Hilda Admin"], ["H-014", "Hossea Luka"], ["H-015", "Hussein Yohana"], ["H-016", "Hakimu Meshack"], ["H-017", "Haruna Maliyamungu"], ["H-018", "Hasa Johnson"], ["H-019", "Hellen Johnas"], ["H-020", "Himidy Kasekwa"], ["H-021", "Hossea Mwanjale"], ["H-022", "Huruma Vumilia"], ["I-001", "Iddy Sigwale"], ["I-002", "Ima Mussa"], ["I-003", "Iman Mwakaila"], ["I-004", "Iman Felix"], ["I-005", "Irene Exavery"], ["I-006", "Isack Bangaya"], ["I-007", "Issa Julius"], ["I-008", "Issa Japhety"], ["I-009", "Itika Msongole"], ["I-010", "Ibrahim Jeremia"], ["I-011", "Ishudy Kingstone"], ["I-012", "Istory Eden"], ["J-001", "Jackline Hanga"], ["J-002", "Jackline Fredy"], ["J-003", "Jackson Mgogolo"], ["J-004", "Japhety Lengesela"], ["J-005", "James Langton"], ["J-006", "James Lucas"], ["J-007", "James Mapunda"], ["J-008", "James Musa"], ["J-009", "Janto West"], ["J-010", "Japhary Mbega"], ["J-011", "Japhary Solasi"], ["J-012", "Japhety Njema"], ["J-013", "Jaston Tuyate"], ["J-014", "Jema Mohele"], ["J-015", "Jen Mbogela"], ["J-016", "Jenifer Amosi"], ["J-017", "Jenifer Dixson"], ["J-018", "Jeremia Alex"], ["J-019", "Jeremia Luka"], ["J-020", "Jescar Tatizo"], ["J-021", "Jestina Baraka"], ["J-022", "Jestina Gideon"], ["J-023", "Jestina Hosia"], ["J-024", "Joyce Japhety"], ["J-025", "Jestina Kumbuka"], ["J-026", "Joanita Raymond"], ["J-027", "John Ambilikile"], ["J-028", "Johnas Hakusa"], ["J-029", "Joseph Masekesa"], ["J-030", "Josephina Sanga"], ["J-031", "Joseph Mirambo"], ["J-032", "Joshua Leonard"], ["J-033", "Joshua Mahenge"], ["J-034", "Joshua Raymond"], ["J-035", "Joyce Kasanga"], ["J-036", "Joyce Japhety"], ["J-037", "Judith Kibona"], ["J-038", "Juliana Gibson"], ["J-039", "Juliana Mtawa"], ["J-040", "Julius Lalusa"], ["J-041", "Julius Ngoja"], ["J-042", "Julius Simwita"], ["J-043", "Julius Swila"], ["J-044", "Juma Syani"], ["J-045", "Jumanne Zubery"], ["J-046", "Junior Huruma"], ["J-047", "Justine Yaledi"], ["J-048", "Jackob Mwanamanga"], ["J-049", "Jackson Amily"], ["J-050", "Janeth Musa"], ["J-051", "Jescar Mzaire"], ["J-052", "Jestina Japhety"], ["J-053", "Jestina Ngayawila"], ["J-054", "Jofrey Focus"], ["J-055", "Joshua Daudi"], ["J-056", "Joshua Jenda"], ["J-057", "Joyce George"], ["J-058", "Joyce Simon"], ["J-059", "Juliana Raphael"], ["J-060", "Justin Mwas"], ["K-001", "Kelly Lemon"], ["K-002", "Kelvin Hakim"], ["K-003", "Kelvin Lameck"], ["K-004", "Kelvin Amos"], ["K-005", "Kibas Neno"], ["K-006", "Keshna Vaicko"], ["K-007", "Kulwa John"], ["K-008", "Kennedy Ndele"], ["L-001", "Lambazan Mbega"], ["L-002", "Lameck Njovaje"], ["L-003", "Langson Tayari"], ["L-004", "Leah John"], ["L-005", "Lena Emmanuel"], ["L-006", "Leaner Andrew"], ["L-007", "Leticia Musa"], ["L-008", "Leonard Hanyuma"], ["L-009", "Leonard Mtawa"], ["L-010", "Levana Mumila"], ["L-011", "Lidia Paschal"], ["L-012", "Lidia Shaban"], ["L-013", "Lidia Christopher"], ["L-014", "Lidia Mwalambo"], ["L-015", "Lilian Lazaro"], ["L-016", "Lilian Simon"], ["L-017", "Lisia Hakimu"], ["L-018", "Lista Mashaka"], ["L-019", "Loida Msuya"], ["L-020", "Lolart Pascal"], ["L-021", "Loveness Exavery"], ["L-022", "Lozia Yalinda"], ["L-023", "Luka Cement"], ["L-024", "Luka Timbula"], ["L-025", "Lulu Sanga"], ["L-026", "Lucy Majiyapwani"], ["L-027", "Lussia Debwe"], ["L-028", "Lussia Hamala"], ["L-029", "Lussia Julius"], ["L-030", "Lussia Lamson"], ["L-031", "Lussia Njenda"], ["L-032", "Lust Yusuph"], ["L-033", "Lusubilo Nzondole"], ["L-034", "Luth Jeremiah"], ["L-035", "Lusia Njenda"], ["L-036", "Lwitiko Lackson"], ["L-037", "Lwitiko Mbwiga"], ["L-038", "Lazaro Daniely"], ["L-039", "Leah Joshua"], ["L-040", "Leonard Mussa"], ["L-041", "Lidia Aman"], ["L-042", "Lidia Festo"], ["L-043", "Lidia Zakayo"], ["L-044", "Lilian Marko"], ["L-045", "Loth Msigwa"], ["L-046", "Luchano Francis"], ["L-047", "Lusa Yoram"], ["M-001", "Maada Mwendo"], ["M-002", "Magdalena Elia"], ["M-003", "Magreth Lalusa"], ["M-004", "Mariana Nicko"], ["M-005", "Magreth Gabriel"], ["M-006", "Magreth Yohna"], ["M-007", "Maila Isack"], ["M-008", "Majembe Mirambo"], ["M-009", "Maria Samson"], ["M-010", "Mariam Kihenzile"], ["M-011", "Maria Jamson"], ["M-012", "Maria Msemakweli"], ["M-013", "Mariam Mwakalenga"], ["M-014", "Mariam Jackob"], ["M-015", "Melisa Lugeni"], ["M-016", "Mariam Kayuni"], ["M-017", "Marry Mvwango"], ["M-018", "Marry Mwanganu"], ["M-019", "Martha Admin"], ["M-020", "Martha Geophrey"], ["M-021", "Mary Kit"], ["M-022", "Mathayo Mtweve"], ["M-023", "Matheo John"], ["M-024", "Mathias Boniface"], ["M-025", "Mathias Mabula"], ["M-026", "Matilda Laston"], ["M-027", "Matilda Mwalyego"], ["M-028", "Matlda Shimanyilo"], ["M-029", "Mawazo Maston"], ["M-030", "Mawazo Mwangogi"], ["M-031", "Mbasa Emson"], ["M-032", "Mbilinyi Daudi"], ["M-033", "Merry Jackson"], ["M-034", "Method Mponzi"], ["M-035", "Mengi Shimais"], ["M-036", "Mesia Steven"], ["M-037", "Meselina Tutate"], ["M-038", "Michael Daniely"], ["M-039", "Michael Amati"], ["M-040", "Michael Deledenga"], ["M-041", "Michael Iddy"], ["M-042", "Michael Jailos"], ["M-043", "Michael Moses"], ["M-044", "Michael Mpashila"], ["M-045", "Michael Paul"], ["M-046", "Monica Amos"], ["M-047", "Msafiri Azizi"], ["M-048", "Moses Msopole"], ["M-049", "Msongole Mena"], ["M-050", "Musa Alison"], ["M-051", "Msuya Chemka"], ["M-052", "Musa Daniely"], ["M-053", "Musa Dennis"], ["M-054", "Musa Eliud"], ["M-055", "Muswelo Mkumbu"], ["M-056", "Munila Mulima"], ["M-057", "Musa Nzimba"], ["M-058", "Musa Paulo"], ["M-059", "Musa Salumu"], ["M-060", "Musa Yeremia"], ["M-061", "Mwanastambala Jackson"], ["M-062", "Mwakipesile Bukuku"], ["M-063", "Mwaupe Patricio"], ["M-064", "Maarifa Debwe"], ["M-065", "Magdalena Erick"], ["M-066", "Mandela Zabron"], ["M-067", "Mariam Clemence"], ["M-068", "Mariam John"], ["M-069", "Mariam Kimweli"], ["M-070", "Marry Messa"], ["M-071", "Marry Pauson"], ["M-072", "Mawazo Godfrey"], ["M-073", "Meshack Clemence"], ["M-074", "Meshack Wilson"], ["M-075", "Michael Edward"], ["M-076", "Michael Tuyate"], ["M-077", "Molise Said"], ["M-078", "Musa Ali"], ["M-079", "Musa Julius"], ["M-080", "Musa Mapelele"], ["M-081", "Mwakaila Fwaya"], ["N-001", "Naftali Ibrahim"], ["N-002", "Nanaka Salangeni"], ["N-003", "Naomi Asubisye"], ["N-004", "Nashoni Elia"], ["N-005", "Nasra Kingstone"], ["N-006", "Nathanael Minja"], ["N-007", "Naza Edson"], ["N-008", "Natha Ngalai"], ["N-009", "Neema Aron"], ["N-010", "Neema Mwankenji"], ["N-011", "Neema Samson"], ["N-012", "Neema Stiwat"], ["N-013", "Nelly Frank"], ["N-014", "Ness Amlike"], ["N-015", "Ness Mwazembe"], ["N-016", "Nickson Geteni"], ["N-017", "Niko Solas"], ["N-018", "Nilly Lameck"], ["N-019", "Noel Juma"], ["N-020", "Nuru Mtawa"], ["N-021", "Nuru Raphael"], ["N-022", "Nzyion Nkembo"], ["N-023", "Ndaisavia Jackson"], ["N-024", "Nkwizye Mwajanga"], ["N-025", "Nzyioni Nkembo"], ["O-001", "Oliver Hakusa"], ["O-002", "Oliga Ndemezye"], ["O-003", "Onesmo Furaha"], ["O-004", "Oscar Jeremiah"], ["O-005", "Osward Timoth"], ["O-006", "Oliver Joel"], ["O-007", "Ombeny Shita"], ["P-001", "Parasilo Haonga"], ["P-002", "Pascal Julius"], ["P-003", "Pascal Patrick"], ["P-004", "Patrick Michael"], ["P-005", "Patrick Michael"], ["P-006", "Paulina Daniel"], ["P-007", "Paulina Mbonile"], ["P-008", "Paulina Mwava"], ["P-009", "Paulo Iddy"], ["P-010", "Paulo Joseph"], ["P-011", "Paulo Mayile"], ["P-012", "Paulo Tesha"], ["P-013", "Pendo Samson"], ["P-014", "Peter Dodo"], ["P-015", "Petro Fredy"], ["P-016", "Prisca Jumanne"], ["P-017", "Pili Amani"], ["P-018", "Pili Mlawa"], ["P-019", "Pili Wilson"], ["P-020", "Philimon Timoth"], ["P-021", "Penina Chama"], ["P-022", "Petro Skitu"], ["P-023", "Philemon Timoth"], ["P-024", "Pili Hakusa"], ["P-025", "Pili Michael"], ["P-026", "Prisca Lazaro"], ["P-027", "Prisca Mambwe"], ["Q-001", "Queen Mwamlima"], ["R-001", "Rachel Boniface"], ["R-002", "Rachel Samson"], ["R-003", "Rahabu Malingi"], ["R-004", "Rahabu Swila"], ["R-005", "Ratipha Wilson"], ["R-006", "Rajabu Jabili"], ["R-007", "Ramos Elias"], ["R-008", "Rashid Ally"], ["R-009", "Ratipha Gerald"], ["R-010", "Ratipha Frank"], ["R-011", "Rebeca Efes"], ["R-012", "Rebeca Mbalamwezi"], ["R-013", "Regina Emmanuel"], ["R-014", "Rehema Amos"], ["R-015", "Rehema Dauson"], ["R-016", "Rehema Mgula"], ["R-017", "Richard Assa"], ["R-018", "Rhoda Hezron"], ["R-019", "Rhoda Richard"], ["R-020", "Richard Sawino"], ["R-021", "Riziki Malafyale"], ["R-022", "Robert Nathan"], ["R-023", "Rojas Iddy"], ["R-024", "Robert Mtafya"], ["R-025", "Rose Jason"], ["R-026", "Rosemary Michael"], ["R-027", "Rosta John"], ["R-028", "Rachel Bahati"], ["R-029", "Rahabu Lazaro"], ["R-030", "Raheli Timauli"], ["R-031", "Rajab Shida"], ["R-032", "Rayvany Subili"], ["R-033", "Rebeca Simon"], ["R-034", "Rehema Mbuza"], ["R-035", "Rhoda Emmanuel"], ["R-036", "Riziki Mwakapanga"], ["R-037", "Romanus Johnas"], ["S-001", "Sabena Kumbuka"], ["S-002", "Sabina Lasmin"], ["S-003", "Sabin Daniel"], ["S-004", "Sadick Alison"], ["S-005", "Said Jabili"], ["S-006", "Salima Juma"], ["S-007", "Salome Kabuja"], ["S-008", "Sam Jengela"], ["S-009", "Samson Ernest"], ["S-010", "Sadick Patson"], ["S-011", "Samwel Iyale"], ["S-012", "Samwel Salamu"], ["S-013", "Samwel Daniely"], ["S-014", "Samwel Mwalusambo"], ["S-015", "Sara Everest"], ["S-016", "Sara Festo"], ["S-017", "Sara Elinan"], ["S-018", "Sara Lusubilo"], ["S-019", "Sara Shelela"], ["S-020", "Saraphina Issa"], ["S-021", "Sauda Joster"], ["S-022", "Sauli Pendo"], ["S-023", "Schola Emson"], ["S-024", "Sebastian Daniely"], ["S-025", "Sebastian Wilson"], ["S-026", "Seleman Mwaminde"], ["S-027", "Selevent Festo"], ["S-028", "Selina Julius"], ["S-029", "Sem Daudi"], ["S-030", "Sesilia Subili"], ["S-031", "Shaibu Felix"], ["S-032", "Sharifa Mlawa"], ["S-033", "Shida South"], ["S-034", "Shukuru George"], ["S-035", "Simon Emmanuel"], ["S-036", "Silvesta John"], ["S-037", "Simon Julius"], ["S-038", "Sister Hussein"], ["S-039", "Skujua Zambi"], ["S-040", "Skuzani Johnas"], ["S-041", "Sophia John"], ["S-042", "Stela Pendo"], ["S-043", "Stela Tuyate"], ["S-044", "Stephano Elium"], ["S-045", "Steven Daniel"], ["S-046", "Stiwati Admin"], ["S-047", "Subira Musa"], ["S-048", "Subili Tuyate"], ["S-049", "Sunday Ditto"], ["S-050", "Sunday Mpuya"], ["S-051", "Susan John"], ["S-052", "Susana Phresia"], ["S-053", "Suzan Mwashilindi"], ["S-054", "Sabin Daniely"], ["S-055", "Sabina Hossea"], ["S-056", "Salome Nsanyumo"], ["S-057", "Sara Daudi"], ["S-058", "Sara Japhety"], ["S-059", "Sara John"], ["S-060", "Sara Salangeni"], ["S-061", "Sauli Isack"], ["S-062", "Schola Wilson"], ["S-063", "Sekela Raphael"], ["S-064", "Shukuru John"], ["S-065", "Stela Yohana"], ["S-066", "Subili Nyanga"], ["S-067", "Sumbuko Jason"], ["T-001", "Tabea Willy"], ["T-002", "Tabia Mwanjela"], ["T-003", "Tabitha Sadala"], ["T-004", "Tamali Jackson"], ["T-005", "Tanael Lackson"], ["T-006", "Tasiana Patrick"], ["T-007", "Tatu Kais"], ["T-008", "Tea Sadaka"], ["T-009", "Tedy Julius"], ["T-010", "Temele Luka"], ["T-011", "Tegemea Sanga"], ["T-012", "Tegemeo Exavery"], ["T-013", "Telezia Donald"], ["T-014", "Telesia John"], ["T-015", "Thabiti Yasini"], ["T-016", "Timlet Mwalyego"], ["T-017", "Ticko Edwin"], ["T-018", "Tina Tamson"], ["T-019", "Tito Kipingi"], ["T-020", "Thomaso Joster"], ["T-021", "Tukae Paulo"], ["T-022", "Tumain Yohana"], ["T-023", "Tumain Mwasenga"], ["T-024", "Tumain Robert"], ["T-025", "Tumaini Michael"], ["T-026", "Tumaini Myombe"], ["T-027", "Tupilike Paulo"], ["T-028", "Taifa John"], ["T-029", "Tamali Daniely"], ["T-030", "Tamali Kanyanya"], ["T-031", "Tatizo Raphael"], ["T-032", "Tedy Philipo"], ["T-033", "Tekla Jeconia"], ["T-034", "Tiago Bihumbi"], ["T-035", "Tomaso Joster"], ["T-036", "Trado Osward"], ["T-037", "Tumpe Emanuely"], ["U-001", "Uria Mwinuka"], ["U-002", "Upendo Evarest"], ["V-001", "Vannesa Joel"], ["V-002", "Vasco Admin"], ["V-003", "Veronica Chaula"], ["V-004", "Veronica Michael"], ["V-005", "Victoria Jasmin"], ["V-006", "Victoria Laiton"], ["V-007", "Vumilia Gerald"], ["V-008", "Vumilia Dickson"], ["V-009", "Vaicko Elinani"], ["V-010", "Veronica Wanaza"], ["V-011", "Victor Elinan"], ["V-012", "Votia Hakimu"], ["W-001", "Wannes Mathias"], ["W-002", "Wema Bukuku"], ["W-003", "Wilhem Simbeye"], ["W-004", "Willy Kamanga"], ["W-005", "Wilson Kazimoto"], ["W-006", "Wilson Mwafilombe"], ["W-007", "Winifrida Amos"], ["W-008", "Witnes Gibson"], ["W-009", "Witnes Hala"], ["W-010", "Wema Jotham"], ["W-011", "Willy Kamamga"], ["W-012", "Willy Shangila"], ["Y-001", "Yaledy Piason"], ["Y-002", "Yankey Fredy"], ["Y-003", "Yanna Mbipa"], ["Y-004", "Yesse Kinyema"], ["Y-005", "Yohana Lucas"], ["Y-006", "Yohana Emmanuel"], ["Y-007", "Yohna Fredy"], ["Y-008", "Yopfane Shelela"], ["Y-009", "Yohana Tuyangaje"], ["Y-010", "Yuness Shelela"], ["Y-011", "Yusta Sichone"], ["Y-012", "Yuster Mbogela"], ["Y-013", "Yusuph Rashidy"], ["Y-014", "Yusuph Wickile"], ["Y-015", "Yohana Daniel"], ["Y-016", "Yohana Malongo"], ["Y-017", "Yohana Mwalyego"], ["Z-001", "Zabron Amen"], ["Z-002", "Zabron Paul"], ["Z-003", "Zacharia Bon"], ["Z-004", "Zaituni Yohana"], ["Z-005", "Zawadi Chiwango"], ["Z-006", "Zawadi Stanley"], ["Z-007", "Zebebayo Braison"], ["Z-008", "Zena Mongomongo"], ["Z-009", "Zena Tusiwe"], ["Z-010", "Zainabu Samwel"], ["Z-011", "Zawadi Job"]];
+const TASKS = ["Charcoal grinding", "Coffee Processing", "Coffee Supporting", "Compost preparation", "Conversion", "Cutting Trees", "Daycare Supervision", "Desuckering", "Digging Irrigation channel", "Driver", "Factory Maintenance", "Fertilization", "Field Hygiene", "Fire Strip", "Fly picking", "Fungicide", "Fusarium control", "Gardening", "General Field Work", "Hand Weeding", "Harvesting", "Herbicide", "Hose Irrigation", "Infilling", "Injured employee", "Intake cleaning", "Leftovers picking", "Mealybug control", "New Field Renovation", "Nursery Upkeep", "Pesticide", "Pipe maintenance", "Preparation of Snail Poison", "Pruning", "Pulling trees", "Ring back", "Ring weeding", "Road Maintenace", "Sample preparation", "Scooping Irrigation Basin", "Shade Regulation", "Sick employee", "Slashing", "Snail Collection", "Snail Poison application", "Special Employees", "Sterm borrer", "Strip Weeding", "Sucker Selection", "Supervisor", "Topping", "Weeding", "Wood Collection"];
+const PLOTS = ["Arabica House", "Daycare", "Factory", "Factory A1", "Factory A2", "Factory A3", "Factory A4", "Factory B1", "Factory B2", "Factory B3", "Factory C1", "Factory C2", "Factory C3", "Factory C4", "Factory D", "Factory plots", "Intake", "It. House", "It. House 1a", "It. House 1b", "It. House 2a", "It. House 2b", "It. House 2c", "It. House 3", "It. House 4", "It. House 5", "It. House 6", "It.Camp A", "It.Camp B", "It.Camps", "Mainroad", "River", "River 1", "River 2", "River 3a", "River 3b", "River 4", "River 5", "S. Chui", "S. Fisi Bottom", "S. Fisi Catura", "S. Fisi Sungura", "S. Fisi Top", "S. Kiboko", "S. Kifaru", "S. Ngiri", "S. Nyani", "S. Nyati", "S. Swala", "S. Tandala", "S. Tembo", "S. Tumbili", "S. Twiga", "Songwa Factory", "Teg. Chatu", "Teg. Kenge no. 1", "Teg. Kenge no. 2", "Teg. Kenge no. 3", "Teg. Kenge no. 4", "Teg. Kifutu", "Teg. Swila", "Tegemeo", "Ut. Bungalow", "Ut. Camp 1a", "Ut. Camp 1b", "Ut. Camp 2", "Ut. Camp 3", "Ut. Camp 4", "Ut. Camps plots", "Ut. Daudi", "Ut. Forest Block", "Ut. House", "Ut. Lodge", "Ut. Moshi", "Ut. plots"];
+const SEED_RECORDS = [];
+const SALARY_OPTIONS = [6000, 8000, 9000, 10000, 12000];
+
+
+</script>
+<script>
+// QR encoder (Kazuhiko Arase, MIT licence) bundled for offline use
+const __QRMODS={};const __QRDEF={};
+function __qrreq(p){const k=p.replace('./','');if(!__QRMODS[k]){const m={exports:{}};__QRDEF[k](m,m.exports);__QRMODS[k]=m.exports;}return __QRMODS[k];}
+__QRDEF['QRMode']=function(module,exports){const require=__qrreq;
+module.exports = {
+    MODE_NUMBER :       1 << 0,
+    MODE_ALPHA_NUM :    1 << 1,
+    MODE_8BIT_BYTE :    1 << 2,
+    MODE_KANJI :        1 << 3
+};
+
+};
+__QRDEF['QRErrorCorrectLevel']=function(module,exports){const require=__qrreq;
+module.exports = {
+	L : 1,
+	M : 0,
+	Q : 3,
+	H : 2
+};
+
+
+};
+__QRDEF['QRMaskPattern']=function(module,exports){const require=__qrreq;
+module.exports = {
+	PATTERN000 : 0,
+	PATTERN001 : 1,
+	PATTERN010 : 2,
+	PATTERN011 : 3,
+	PATTERN100 : 4,
+	PATTERN101 : 5,
+	PATTERN110 : 6,
+	PATTERN111 : 7
+};
+
+};
+__QRDEF['QRMath']=function(module,exports){const require=__qrreq;
+var QRMath = {
+
+	glog : function(n) {
+	
+		if (n < 1) {
+			throw new Error("glog(" + n + ")");
+		}
+		
+		return QRMath.LOG_TABLE[n];
+	},
+	
+	gexp : function(n) {
+	
+		while (n < 0) {
+			n += 255;
+		}
+	
+		while (n >= 256) {
+			n -= 255;
+		}
+	
+		return QRMath.EXP_TABLE[n];
+	},
+	
+	EXP_TABLE : new Array(256),
+	
+	LOG_TABLE : new Array(256)
+
+};
+	
+for (var i = 0; i < 8; i++) {
+	QRMath.EXP_TABLE[i] = 1 << i;
+}
+for (var i = 8; i < 256; i++) {
+	QRMath.EXP_TABLE[i] = QRMath.EXP_TABLE[i - 4]
+		^ QRMath.EXP_TABLE[i - 5]
+		^ QRMath.EXP_TABLE[i - 6]
+		^ QRMath.EXP_TABLE[i - 8];
+}
+for (var i = 0; i < 255; i++) {
+	QRMath.LOG_TABLE[QRMath.EXP_TABLE[i] ] = i;
+}
+
+module.exports = QRMath;
+
+};
+__QRDEF['QRPolynomial']=function(module,exports){const require=__qrreq;
+var QRMath = require('./QRMath');
+
+function QRPolynomial(num, shift) {
+	if (num.length === undefined) {
+		throw new Error(num.length + "/" + shift);
+	}
+
+	var offset = 0;
+
+	while (offset < num.length && num[offset] === 0) {
+		offset++;
+	}
+
+	this.num = new Array(num.length - offset + shift);
+	for (var i = 0; i < num.length - offset; i++) {
+		this.num[i] = num[i + offset];
+	}
+}
+
+QRPolynomial.prototype = {
+
+	get : function(index) {
+		return this.num[index];
+	},
+	
+	getLength : function() {
+		return this.num.length;
+	},
+	
+	multiply : function(e) {
+	
+		var num = new Array(this.getLength() + e.getLength() - 1);
+	
+		for (var i = 0; i < this.getLength(); i++) {
+			for (var j = 0; j < e.getLength(); j++) {
+				num[i + j] ^= QRMath.gexp(QRMath.glog(this.get(i) ) + QRMath.glog(e.get(j) ) );
+			}
+		}
+	
+		return new QRPolynomial(num, 0);
+	},
+	
+	mod : function(e) {
+	
+		if (this.getLength() - e.getLength() < 0) {
+			return this;
+		}
+	
+		var ratio = QRMath.glog(this.get(0) ) - QRMath.glog(e.get(0) );
+	
+		var num = new Array(this.getLength() );
+		
+		for (var i = 0; i < this.getLength(); i++) {
+			num[i] = this.get(i);
+		}
+		
+		for (var x = 0; x < e.getLength(); x++) {
+			num[x] ^= QRMath.gexp(QRMath.glog(e.get(x) ) + ratio);
+		}
+	
+		// recursive call
+		return new QRPolynomial(num, 0).mod(e);
+	}
+};
+
+module.exports = QRPolynomial;
+
+};
+__QRDEF['QRRSBlock']=function(module,exports){const require=__qrreq;
+var QRErrorCorrectLevel = require('./QRErrorCorrectLevel');
+
+function QRRSBlock(totalCount, dataCount) {
+	this.totalCount = totalCount;
+	this.dataCount  = dataCount;
+}
+
+QRRSBlock.RS_BLOCK_TABLE = [
+
+	// L
+	// M
+	// Q
+	// H
+
+	// 1
+	[1, 26, 19],
+	[1, 26, 16],
+	[1, 26, 13],
+	[1, 26, 9],
+	
+	// 2
+	[1, 44, 34],
+	[1, 44, 28],
+	[1, 44, 22],
+	[1, 44, 16],
+
+	// 3
+	[1, 70, 55],
+	[1, 70, 44],
+	[2, 35, 17],
+	[2, 35, 13],
+
+	// 4		
+	[1, 100, 80],
+	[2, 50, 32],
+	[2, 50, 24],
+	[4, 25, 9],
+	
+	// 5
+	[1, 134, 108],
+	[2, 67, 43],
+	[2, 33, 15, 2, 34, 16],
+	[2, 33, 11, 2, 34, 12],
+	
+	// 6
+	[2, 86, 68],
+	[4, 43, 27],
+	[4, 43, 19],
+	[4, 43, 15],
+	
+	// 7		
+	[2, 98, 78],
+	[4, 49, 31],
+	[2, 32, 14, 4, 33, 15],
+	[4, 39, 13, 1, 40, 14],
+	
+	// 8
+	[2, 121, 97],
+	[2, 60, 38, 2, 61, 39],
+	[4, 40, 18, 2, 41, 19],
+	[4, 40, 14, 2, 41, 15],
+	
+	// 9
+	[2, 146, 116],
+	[3, 58, 36, 2, 59, 37],
+	[4, 36, 16, 4, 37, 17],
+	[4, 36, 12, 4, 37, 13],
+	
+	// 10		
+	[2, 86, 68, 2, 87, 69],
+	[4, 69, 43, 1, 70, 44],
+	[6, 43, 19, 2, 44, 20],
+	[6, 43, 15, 2, 44, 16],
+
+	// 11
+	[4, 101, 81],
+	[1, 80, 50, 4, 81, 51],
+	[4, 50, 22, 4, 51, 23],
+	[3, 36, 12, 8, 37, 13],
+
+	// 12
+	[2, 116, 92, 2, 117, 93],
+	[6, 58, 36, 2, 59, 37],
+	[4, 46, 20, 6, 47, 21],
+	[7, 42, 14, 4, 43, 15],
+
+	// 13
+	[4, 133, 107],
+	[8, 59, 37, 1, 60, 38],
+	[8, 44, 20, 4, 45, 21],
+	[12, 33, 11, 4, 34, 12],
+
+	// 14
+	[3, 145, 115, 1, 146, 116],
+	[4, 64, 40, 5, 65, 41],
+	[11, 36, 16, 5, 37, 17],
+	[11, 36, 12, 5, 37, 13],
+
+	// 15
+	[5, 109, 87, 1, 110, 88],
+	[5, 65, 41, 5, 66, 42],
+	[5, 54, 24, 7, 55, 25],
+	[11, 36, 12],
+
+	// 16
+	[5, 122, 98, 1, 123, 99],
+	[7, 73, 45, 3, 74, 46],
+	[15, 43, 19, 2, 44, 20],
+	[3, 45, 15, 13, 46, 16],
+
+	// 17
+	[1, 135, 107, 5, 136, 108],
+	[10, 74, 46, 1, 75, 47],
+	[1, 50, 22, 15, 51, 23],
+	[2, 42, 14, 17, 43, 15],
+
+	// 18
+	[5, 150, 120, 1, 151, 121],
+	[9, 69, 43, 4, 70, 44],
+	[17, 50, 22, 1, 51, 23],
+	[2, 42, 14, 19, 43, 15],
+
+	// 19
+	[3, 141, 113, 4, 142, 114],
+	[3, 70, 44, 11, 71, 45],
+	[17, 47, 21, 4, 48, 22],
+	[9, 39, 13, 16, 40, 14],
+
+	// 20
+	[3, 135, 107, 5, 136, 108],
+	[3, 67, 41, 13, 68, 42],
+	[15, 54, 24, 5, 55, 25],
+	[15, 43, 15, 10, 44, 16],
+
+	// 21
+	[4, 144, 116, 4, 145, 117],
+	[17, 68, 42],
+	[17, 50, 22, 6, 51, 23],
+	[19, 46, 16, 6, 47, 17],
+
+	// 22
+	[2, 139, 111, 7, 140, 112],
+	[17, 74, 46],
+	[7, 54, 24, 16, 55, 25],
+	[34, 37, 13],
+
+	// 23
+	[4, 151, 121, 5, 152, 122],
+	[4, 75, 47, 14, 76, 48],
+	[11, 54, 24, 14, 55, 25],
+	[16, 45, 15, 14, 46, 16],
+
+	// 24
+	[6, 147, 117, 4, 148, 118],
+	[6, 73, 45, 14, 74, 46],
+	[11, 54, 24, 16, 55, 25],
+	[30, 46, 16, 2, 47, 17],
+
+	// 25
+	[8, 132, 106, 4, 133, 107],
+	[8, 75, 47, 13, 76, 48],
+	[7, 54, 24, 22, 55, 25],
+	[22, 45, 15, 13, 46, 16],
+
+	// 26
+	[10, 142, 114, 2, 143, 115],
+	[19, 74, 46, 4, 75, 47],
+	[28, 50, 22, 6, 51, 23],
+	[33, 46, 16, 4, 47, 17],
+
+	// 27
+	[8, 152, 122, 4, 153, 123],
+	[22, 73, 45, 3, 74, 46],
+	[8, 53, 23, 26, 54, 24],
+	[12, 45, 15, 28, 46, 16],
+
+	// 28
+	[3, 147, 117, 10, 148, 118],
+	[3, 73, 45, 23, 74, 46],
+	[4, 54, 24, 31, 55, 25],
+	[11, 45, 15, 31, 46, 16],
+
+	// 29
+	[7, 146, 116, 7, 147, 117],
+	[21, 73, 45, 7, 74, 46],
+	[1, 53, 23, 37, 54, 24],
+	[19, 45, 15, 26, 46, 16],
+
+	// 30
+	[5, 145, 115, 10, 146, 116],
+	[19, 75, 47, 10, 76, 48],
+	[15, 54, 24, 25, 55, 25],
+	[23, 45, 15, 25, 46, 16],
+
+	// 31
+	[13, 145, 115, 3, 146, 116],
+	[2, 74, 46, 29, 75, 47],
+	[42, 54, 24, 1, 55, 25],
+	[23, 45, 15, 28, 46, 16],
+
+	// 32
+	[17, 145, 115],
+	[10, 74, 46, 23, 75, 47],
+	[10, 54, 24, 35, 55, 25],
+	[19, 45, 15, 35, 46, 16],
+
+	// 33
+	[17, 145, 115, 1, 146, 116],
+	[14, 74, 46, 21, 75, 47],
+	[29, 54, 24, 19, 55, 25],
+	[11, 45, 15, 46, 46, 16],
+
+	// 34
+	[13, 145, 115, 6, 146, 116],
+	[14, 74, 46, 23, 75, 47],
+	[44, 54, 24, 7, 55, 25],
+	[59, 46, 16, 1, 47, 17],
+
+	// 35
+	[12, 151, 121, 7, 152, 122],
+	[12, 75, 47, 26, 76, 48],
+	[39, 54, 24, 14, 55, 25],
+	[22, 45, 15, 41, 46, 16],
+
+	// 36
+	[6, 151, 121, 14, 152, 122],
+	[6, 75, 47, 34, 76, 48],
+	[46, 54, 24, 10, 55, 25],
+	[2, 45, 15, 64, 46, 16],
+
+	// 37
+	[17, 152, 122, 4, 153, 123],
+	[29, 74, 46, 14, 75, 47],
+	[49, 54, 24, 10, 55, 25],
+	[24, 45, 15, 46, 46, 16],
+
+	// 38
+	[4, 152, 122, 18, 153, 123],
+	[13, 74, 46, 32, 75, 47],
+	[48, 54, 24, 14, 55, 25],
+	[42, 45, 15, 32, 46, 16],
+
+	// 39
+	[20, 147, 117, 4, 148, 118],
+	[40, 75, 47, 7, 76, 48],
+	[43, 54, 24, 22, 55, 25],
+	[10, 45, 15, 67, 46, 16],
+
+	// 40
+	[19, 148, 118, 6, 149, 119],
+	[18, 75, 47, 31, 76, 48],
+	[34, 54, 24, 34, 55, 25],
+	[20, 45, 15, 61, 46, 16]
+];
+
+QRRSBlock.getRSBlocks = function(typeNumber, errorCorrectLevel) {
+	
+	var rsBlock = QRRSBlock.getRsBlockTable(typeNumber, errorCorrectLevel);
+	
+	if (rsBlock === undefined) {
+		throw new Error("bad rs block @ typeNumber:" + typeNumber + "/errorCorrectLevel:" + errorCorrectLevel);
+	}
+
+	var length = rsBlock.length / 3;
+	
+	var list = [];
+	
+	for (var i = 0; i < length; i++) {
+
+		var count = rsBlock[i * 3 + 0];
+		var totalCount = rsBlock[i * 3 + 1];
+		var dataCount  = rsBlock[i * 3 + 2];
+
+		for (var j = 0; j < count; j++) {
+			list.push(new QRRSBlock(totalCount, dataCount) );	
+		}
+	}
+	
+	return list;
+};
+
+QRRSBlock.getRsBlockTable = function(typeNumber, errorCorrectLevel) {
+
+	switch(errorCorrectLevel) {
+	case QRErrorCorrectLevel.L :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+	case QRErrorCorrectLevel.M :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+	case QRErrorCorrectLevel.Q :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+	case QRErrorCorrectLevel.H :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+	default :
+		return undefined;
+	}
+};
+
+module.exports = QRRSBlock;
+
+};
+__QRDEF['QRBitBuffer']=function(module,exports){const require=__qrreq;
+function QRBitBuffer() {
+	this.buffer = [];
+	this.length = 0;
+}
+
+QRBitBuffer.prototype = {
+
+	get : function(index) {
+		var bufIndex = Math.floor(index / 8);
+		return ( (this.buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+	},
+	
+	put : function(num, length) {
+		for (var i = 0; i < length; i++) {
+			this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+		}
+	},
+	
+	getLengthInBits : function() {
+		return this.length;
+	},
+	
+	putBit : function(bit) {
+	
+		var bufIndex = Math.floor(this.length / 8);
+		if (this.buffer.length <= bufIndex) {
+			this.buffer.push(0);
+		}
+	
+		if (bit) {
+			this.buffer[bufIndex] |= (0x80 >>> (this.length % 8) );
+		}
+	
+		this.length++;
+	}
+};
+
+module.exports = QRBitBuffer;
+
+};
+__QRDEF['QR8bitByte']=function(module,exports){const require=__qrreq;
+var QRMode = require('./QRMode');
+
+function QR8bitByte(data) {
+	this.mode = QRMode.MODE_8BIT_BYTE;
+	this.data = data;
+}
+
+QR8bitByte.prototype = {
+
+	getLength : function() {
+		return this.data.length;
+	},
+	
+	write : function(buffer) {
+		for (var i = 0; i < this.data.length; i++) {
+			// not JIS ...
+			buffer.put(this.data.charCodeAt(i), 8);
+		}
+	}
+};
+
+module.exports = QR8bitByte;
+
+};
+__QRDEF['QRUtil']=function(module,exports){const require=__qrreq;
+var QRMode = require('./QRMode');
+var QRPolynomial = require('./QRPolynomial');
+var QRMath = require('./QRMath');
+var QRMaskPattern = require('./QRMaskPattern');
+
+var QRUtil = {
+
+    PATTERN_POSITION_TABLE : [
+        [],
+        [6, 18],
+        [6, 22],
+        [6, 26],
+        [6, 30],
+        [6, 34],
+        [6, 22, 38],
+        [6, 24, 42],
+        [6, 26, 46],
+        [6, 28, 50],
+        [6, 30, 54],        
+        [6, 32, 58],
+        [6, 34, 62],
+        [6, 26, 46, 66],
+        [6, 26, 48, 70],
+        [6, 26, 50, 74],
+        [6, 30, 54, 78],
+        [6, 30, 56, 82],
+        [6, 30, 58, 86],
+        [6, 34, 62, 90],
+        [6, 28, 50, 72, 94],
+        [6, 26, 50, 74, 98],
+        [6, 30, 54, 78, 102],
+        [6, 28, 54, 80, 106],
+        [6, 32, 58, 84, 110],
+        [6, 30, 58, 86, 114],
+        [6, 34, 62, 90, 118],
+        [6, 26, 50, 74, 98, 122],
+        [6, 30, 54, 78, 102, 126],
+        [6, 26, 52, 78, 104, 130],
+        [6, 30, 56, 82, 108, 134],
+        [6, 34, 60, 86, 112, 138],
+        [6, 30, 58, 86, 114, 142],
+        [6, 34, 62, 90, 118, 146],
+        [6, 30, 54, 78, 102, 126, 150],
+        [6, 24, 50, 76, 102, 128, 154],
+        [6, 28, 54, 80, 106, 132, 158],
+        [6, 32, 58, 84, 110, 136, 162],
+        [6, 26, 54, 82, 110, 138, 166],
+        [6, 30, 58, 86, 114, 142, 170]
+    ],
+
+    G15 : (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0),
+    G18 : (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0),
+    G15_MASK : (1 << 14) | (1 << 12) | (1 << 10)    | (1 << 4) | (1 << 1),
+
+    getBCHTypeInfo : function(data) {
+        var d = data << 10;
+        while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) >= 0) {
+            d ^= (QRUtil.G15 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) ) );    
+        }
+        return ( (data << 10) | d) ^ QRUtil.G15_MASK;
+    },
+
+    getBCHTypeNumber : function(data) {
+        var d = data << 12;
+        while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) >= 0) {
+            d ^= (QRUtil.G18 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) ) );    
+        }
+        return (data << 12) | d;
+    },
+
+    getBCHDigit : function(data) {
+
+        var digit = 0;
+
+        while (data !== 0) {
+            digit++;
+            data >>>= 1;
+        }
+
+        return digit;
+    },
+
+    getPatternPosition : function(typeNumber) {
+        return QRUtil.PATTERN_POSITION_TABLE[typeNumber - 1];
+    },
+
+    getMask : function(maskPattern, i, j) {
+        
+        switch (maskPattern) {
+            
+        case QRMaskPattern.PATTERN000 : return (i + j) % 2 === 0;
+        case QRMaskPattern.PATTERN001 : return i % 2 === 0;
+        case QRMaskPattern.PATTERN010 : return j % 3 === 0;
+        case QRMaskPattern.PATTERN011 : return (i + j) % 3 === 0;
+        case QRMaskPattern.PATTERN100 : return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 === 0;
+        case QRMaskPattern.PATTERN101 : return (i * j) % 2 + (i * j) % 3 === 0;
+        case QRMaskPattern.PATTERN110 : return ( (i * j) % 2 + (i * j) % 3) % 2 === 0;
+        case QRMaskPattern.PATTERN111 : return ( (i * j) % 3 + (i + j) % 2) % 2 === 0;
+
+        default :
+            throw new Error("bad maskPattern:" + maskPattern);
+        }
+    },
+
+    getErrorCorrectPolynomial : function(errorCorrectLength) {
+
+        var a = new QRPolynomial([1], 0);
+
+        for (var i = 0; i < errorCorrectLength; i++) {
+            a = a.multiply(new QRPolynomial([1, QRMath.gexp(i)], 0) );
+        }
+
+        return a;
+    },
+
+    getLengthInBits : function(mode, type) {
+
+        if (1 <= type && type < 10) {
+
+            // 1 - 9
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 10;
+            case QRMode.MODE_ALPHA_NUM  : return 9;
+            case QRMode.MODE_8BIT_BYTE  : return 8;
+            case QRMode.MODE_KANJI      : return 8;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else if (type < 27) {
+
+            // 10 - 26
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 12;
+            case QRMode.MODE_ALPHA_NUM  : return 11;
+            case QRMode.MODE_8BIT_BYTE  : return 16;
+            case QRMode.MODE_KANJI      : return 10;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else if (type < 41) {
+
+            // 27 - 40
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 14;
+            case QRMode.MODE_ALPHA_NUM  : return 13;
+            case QRMode.MODE_8BIT_BYTE  : return 16;
+            case QRMode.MODE_KANJI      : return 12;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else {
+            throw new Error("type:" + type);
+        }
+    },
+
+    getLostPoint : function(qrCode) {
+        
+        var moduleCount = qrCode.getModuleCount();
+        var lostPoint = 0;
+        var row = 0; 
+        var col = 0;
+
+        
+        // LEVEL1
+        
+        for (row = 0; row < moduleCount; row++) {
+
+            for (col = 0; col < moduleCount; col++) {
+
+                var sameCount = 0;
+                var dark = qrCode.isDark(row, col);
+
+                for (var r = -1; r <= 1; r++) {
+
+                    if (row + r < 0 || moduleCount <= row + r) {
+                        continue;
+                    }
+
+                    for (var c = -1; c <= 1; c++) {
+
+                        if (col + c < 0 || moduleCount <= col + c) {
+                            continue;
+                        }
+
+                        if (r === 0 && c === 0) {
+                            continue;
+                        }
+
+                        if (dark === qrCode.isDark(row + r, col + c) ) {
+                            sameCount++;
+                        }
+                    }
+                }
+
+                if (sameCount > 5) {
+                    lostPoint += (3 + sameCount - 5);
+                }
+            }
+        }
+
+        // LEVEL2
+
+        for (row = 0; row < moduleCount - 1; row++) {
+            for (col = 0; col < moduleCount - 1; col++) {
+                var count = 0;
+                if (qrCode.isDark(row,     col    ) ) count++;
+                if (qrCode.isDark(row + 1, col    ) ) count++;
+                if (qrCode.isDark(row,     col + 1) ) count++;
+                if (qrCode.isDark(row + 1, col + 1) ) count++;
+                if (count === 0 || count === 4) {
+                    lostPoint += 3;
+                }
+            }
+        }
+
+        // LEVEL3
+
+        for (row = 0; row < moduleCount; row++) {
+            for (col = 0; col < moduleCount - 6; col++) {
+                if (qrCode.isDark(row, col) && 
+                        !qrCode.isDark(row, col + 1) && 
+                         qrCode.isDark(row, col + 2) && 
+                         qrCode.isDark(row, col + 3) && 
+                         qrCode.isDark(row, col + 4) && 
+                        !qrCode.isDark(row, col + 5) && 
+                         qrCode.isDark(row, col + 6) ) {
+                    lostPoint += 40;
+                }
+            }
+        }
+
+        for (col = 0; col < moduleCount; col++) {
+            for (row = 0; row < moduleCount - 6; row++) {
+                if (qrCode.isDark(row, col) &&
+                        !qrCode.isDark(row + 1, col) &&
+                         qrCode.isDark(row + 2, col) &&
+                         qrCode.isDark(row + 3, col) &&
+                         qrCode.isDark(row + 4, col) &&
+                        !qrCode.isDark(row + 5, col) &&
+                         qrCode.isDark(row + 6, col) ) {
+                    lostPoint += 40;
+                }
+            }
+        }
+
+        // LEVEL4
+        
+        var darkCount = 0;
+
+        for (col = 0; col < moduleCount; col++) {
+            for (row = 0; row < moduleCount; row++) {
+                if (qrCode.isDark(row, col) ) {
+                    darkCount++;
+                }
+            }
+        }
+        
+        var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+        lostPoint += ratio * 10;
+
+        return lostPoint;       
+    }
+
+};
+
+module.exports = QRUtil;
+
+};
+__QRDEF['index']=function(module,exports){const require=__qrreq;
+//---------------------------------------------------------------------
+// QRCode for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//   http://www.opensource.org/licenses/mit-license.php
+//
+// The word "QR Code" is registered trademark of 
+// DENSO WAVE INCORPORATED
+//   http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+// Modified to work in node for this project (and some refactoring)
+//---------------------------------------------------------------------
+
+var QR8bitByte = require('./QR8bitByte');
+var QRUtil = require('./QRUtil');
+var QRPolynomial = require('./QRPolynomial');
+var QRRSBlock = require('./QRRSBlock');
+var QRBitBuffer = require('./QRBitBuffer');
+
+function QRCode(typeNumber, errorCorrectLevel) {
+	this.typeNumber = typeNumber;
+	this.errorCorrectLevel = errorCorrectLevel;
+	this.modules = null;
+	this.moduleCount = 0;
+	this.dataCache = null;
+	this.dataList = [];
+}
+
+QRCode.prototype = {
+	
+	addData : function(data) {
+		var newData = new QR8bitByte(data);
+		this.dataList.push(newData);
+		this.dataCache = null;
+	},
+	
+	isDark : function(row, col) {
+		if (row < 0 || this.moduleCount <= row || col < 0 || this.moduleCount <= col) {
+			throw new Error(row + "," + col);
+		}
+		return this.modules[row][col];
+	},
+
+	getModuleCount : function() {
+		return this.moduleCount;
+	},
+	
+	make : function() {
+		// Calculate automatically typeNumber if provided is < 1
+		if (this.typeNumber < 1 ){
+			var typeNumber = 1;
+			for (typeNumber = 1; typeNumber < 40; typeNumber++) {
+				var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, this.errorCorrectLevel);
+
+				var buffer = new QRBitBuffer();
+				var totalDataCount = 0;
+				for (var i = 0; i < rsBlocks.length; i++) {
+					totalDataCount += rsBlocks[i].dataCount;
+				}
+
+				for (var x = 0; x < this.dataList.length; x++) {
+					var data = this.dataList[x];
+					buffer.put(data.mode, 4);
+					buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+					data.write(buffer);
+				}
+				if (buffer.getLengthInBits() <= totalDataCount * 8)
+					break;
+			}
+			this.typeNumber = typeNumber;
+		}
+		this.makeImpl(false, this.getBestMaskPattern() );
+	},
+	
+	makeImpl : function(test, maskPattern) {
+		
+		this.moduleCount = this.typeNumber * 4 + 17;
+		this.modules = new Array(this.moduleCount);
+		
+		for (var row = 0; row < this.moduleCount; row++) {
+			
+			this.modules[row] = new Array(this.moduleCount);
+			
+			for (var col = 0; col < this.moduleCount; col++) {
+				this.modules[row][col] = null;//(col + row) % 3;
+			}
+		}
+	
+		this.setupPositionProbePattern(0, 0);
+		this.setupPositionProbePattern(this.moduleCount - 7, 0);
+		this.setupPositionProbePattern(0, this.moduleCount - 7);
+		this.setupPositionAdjustPattern();
+		this.setupTimingPattern();
+		this.setupTypeInfo(test, maskPattern);
+		
+		if (this.typeNumber >= 7) {
+			this.setupTypeNumber(test);
+		}
+	
+		if (this.dataCache === null) {
+			this.dataCache = QRCode.createData(this.typeNumber, this.errorCorrectLevel, this.dataList);
+		}
+	
+		this.mapData(this.dataCache, maskPattern);
+	},
+
+	setupPositionProbePattern : function(row, col)  {
+		
+		for (var r = -1; r <= 7; r++) {
+			
+			if (row + r <= -1 || this.moduleCount <= row + r) continue;
+			
+			for (var c = -1; c <= 7; c++) {
+				
+				if (col + c <= -1 || this.moduleCount <= col + c) continue;
+				
+				if ( (0 <= r && r <= 6 && (c === 0 || c === 6) ) || 
+                     (0 <= c && c <= 6 && (r === 0 || r === 6) ) || 
+                     (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+					this.modules[row + r][col + c] = true;
+				} else {
+					this.modules[row + r][col + c] = false;
+				}
+			}		
+		}		
+	},
+	
+	getBestMaskPattern : function() {
+	
+		var minLostPoint = 0;
+		var pattern = 0;
+	
+		for (var i = 0; i < 8; i++) {
+			
+			this.makeImpl(true, i);
+	
+			var lostPoint = QRUtil.getLostPoint(this);
+	
+			if (i === 0 || minLostPoint >  lostPoint) {
+				minLostPoint = lostPoint;
+				pattern = i;
+			}
+		}
+	
+		return pattern;
+	},
+	
+	createMovieClip : function(target_mc, instance_name, depth) {
+	
+		var qr_mc = target_mc.createEmptyMovieClip(instance_name, depth);
+		var cs = 1;
+	
+		this.make();
+
+		for (var row = 0; row < this.modules.length; row++) {
+			
+			var y = row * cs;
+			
+			for (var col = 0; col < this.modules[row].length; col++) {
+	
+				var x = col * cs;
+				var dark = this.modules[row][col];
+			
+				if (dark) {
+					qr_mc.beginFill(0, 100);
+					qr_mc.moveTo(x, y);
+					qr_mc.lineTo(x + cs, y);
+					qr_mc.lineTo(x + cs, y + cs);
+					qr_mc.lineTo(x, y + cs);
+					qr_mc.endFill();
+				}
+			}
+		}
+		
+		return qr_mc;
+	},
+
+	setupTimingPattern : function() {
+		
+		for (var r = 8; r < this.moduleCount - 8; r++) {
+			if (this.modules[r][6] !== null) {
+				continue;
+			}
+			this.modules[r][6] = (r % 2 === 0);
+		}
+	
+		for (var c = 8; c < this.moduleCount - 8; c++) {
+			if (this.modules[6][c] !== null) {
+				continue;
+			}
+			this.modules[6][c] = (c % 2 === 0);
+		}
+	},
+	
+	setupPositionAdjustPattern : function() {
+	
+		var pos = QRUtil.getPatternPosition(this.typeNumber);
+		
+		for (var i = 0; i < pos.length; i++) {
+		
+			for (var j = 0; j < pos.length; j++) {
+			
+				var row = pos[i];
+				var col = pos[j];
+				
+				if (this.modules[row][col] !== null) {
+					continue;
+				}
+				
+				for (var r = -2; r <= 2; r++) {
+				
+					for (var c = -2; c <= 2; c++) {
+					
+						if (Math.abs(r) === 2 || 
+                            Math.abs(c) === 2 ||
+                            (r === 0 && c === 0) ) {
+							this.modules[row + r][col + c] = true;
+						} else {
+							this.modules[row + r][col + c] = false;
+						}
+					}
+				}
+			}
+		}
+	},
+	
+	setupTypeNumber : function(test) {
+	
+		var bits = QRUtil.getBCHTypeNumber(this.typeNumber);
+        var mod;
+	
+		for (var i = 0; i < 18; i++) {
+			mod = (!test && ( (bits >> i) & 1) === 1);
+			this.modules[Math.floor(i / 3)][i % 3 + this.moduleCount - 8 - 3] = mod;
+		}
+	
+		for (var x = 0; x < 18; x++) {
+			mod = (!test && ( (bits >> x) & 1) === 1);
+			this.modules[x % 3 + this.moduleCount - 8 - 3][Math.floor(x / 3)] = mod;
+		}
+	},
+	
+	setupTypeInfo : function(test, maskPattern) {
+	
+		var data = (this.errorCorrectLevel << 3) | maskPattern;
+		var bits = QRUtil.getBCHTypeInfo(data);
+        var mod;
+	
+		// vertical		
+		for (var v = 0; v < 15; v++) {
+	
+			mod = (!test && ( (bits >> v) & 1) === 1);
+	
+			if (v < 6) {
+				this.modules[v][8] = mod;
+			} else if (v < 8) {
+				this.modules[v + 1][8] = mod;
+			} else {
+				this.modules[this.moduleCount - 15 + v][8] = mod;
+			}
+		}
+	
+		// horizontal
+		for (var h = 0; h < 15; h++) {
+	
+			mod = (!test && ( (bits >> h) & 1) === 1);
+			
+			if (h < 8) {
+				this.modules[8][this.moduleCount - h - 1] = mod;
+			} else if (h < 9) {
+				this.modules[8][15 - h - 1 + 1] = mod;
+			} else {
+				this.modules[8][15 - h - 1] = mod;
+			}
+		}
+	
+		// fixed module
+		this.modules[this.moduleCount - 8][8] = (!test);
+	
+	},
+	
+	mapData : function(data, maskPattern) {
+		
+		var inc = -1;
+		var row = this.moduleCount - 1;
+		var bitIndex = 7;
+		var byteIndex = 0;
+		
+		for (var col = this.moduleCount - 1; col > 0; col -= 2) {
+	
+			if (col === 6) col--;
+	
+			while (true) {
+	
+				for (var c = 0; c < 2; c++) {
+					
+					if (this.modules[row][col - c] === null) {
+						
+						var dark = false;
+	
+						if (byteIndex < data.length) {
+							dark = ( ( (data[byteIndex] >>> bitIndex) & 1) === 1);
+						}
+	
+						var mask = QRUtil.getMask(maskPattern, row, col - c);
+	
+						if (mask) {
+							dark = !dark;
+						}
+						
+						this.modules[row][col - c] = dark;
+						bitIndex--;
+	
+						if (bitIndex === -1) {
+							byteIndex++;
+							bitIndex = 7;
+						}
+					}
+				}
+								
+				row += inc;
+	
+				if (row < 0 || this.moduleCount <= row) {
+					row -= inc;
+					inc = -inc;
+					break;
+				}
+			}
+		}
+		
+	}
+
+};
+
+QRCode.PAD0 = 0xEC;
+QRCode.PAD1 = 0x11;
+
+QRCode.createData = function(typeNumber, errorCorrectLevel, dataList) {
+	
+	var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectLevel);
+	
+	var buffer = new QRBitBuffer();
+	
+	for (var i = 0; i < dataList.length; i++) {
+		var data = dataList[i];
+		buffer.put(data.mode, 4);
+		buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+		data.write(buffer);
+	}
+
+	// calc num max data.
+	var totalDataCount = 0;
+	for (var x = 0; x < rsBlocks.length; x++) {
+		totalDataCount += rsBlocks[x].dataCount;
+	}
+
+	if (buffer.getLengthInBits() > totalDataCount * 8) {
+		throw new Error("code length overflow. (" + 
+            buffer.getLengthInBits() + 
+            ">" +  
+            totalDataCount * 8 + 
+            ")");
+	}
+
+	// end code
+	if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+		buffer.put(0, 4);
+	}
+
+	// padding
+	while (buffer.getLengthInBits() % 8 !== 0) {
+		buffer.putBit(false);
+	}
+
+	// padding
+	while (true) {
+		
+		if (buffer.getLengthInBits() >= totalDataCount * 8) {
+			break;
+		}
+		buffer.put(QRCode.PAD0, 8);
+		
+		if (buffer.getLengthInBits() >= totalDataCount * 8) {
+			break;
+		}
+		buffer.put(QRCode.PAD1, 8);
+	}
+
+	return QRCode.createBytes(buffer, rsBlocks);
+};
+
+QRCode.createBytes = function(buffer, rsBlocks) {
+
+	var offset = 0;
+	
+	var maxDcCount = 0;
+	var maxEcCount = 0;
+	
+	var dcdata = new Array(rsBlocks.length);
+	var ecdata = new Array(rsBlocks.length);
+	
+	for (var r = 0; r < rsBlocks.length; r++) {
+
+		var dcCount = rsBlocks[r].dataCount;
+		var ecCount = rsBlocks[r].totalCount - dcCount;
+
+		maxDcCount = Math.max(maxDcCount, dcCount);
+		maxEcCount = Math.max(maxEcCount, ecCount);
+		
+		dcdata[r] = new Array(dcCount);
+		
+		for (var i = 0; i < dcdata[r].length; i++) {
+			dcdata[r][i] = 0xff & buffer.buffer[i + offset];
+		}
+		offset += dcCount;
+		
+		var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+		var rawPoly = new QRPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+		var modPoly = rawPoly.mod(rsPoly);
+		ecdata[r] = new Array(rsPoly.getLength() - 1);
+		for (var x = 0; x < ecdata[r].length; x++) {
+            var modIndex = x + modPoly.getLength() - ecdata[r].length;
+			ecdata[r][x] = (modIndex >= 0)? modPoly.get(modIndex) : 0;
+		}
+
+	}
+	
+	var totalCodeCount = 0;
+	for (var y = 0; y < rsBlocks.length; y++) {
+		totalCodeCount += rsBlocks[y].totalCount;
+	}
+
+	var data = new Array(totalCodeCount);
+	var index = 0;
+
+	for (var z = 0; z < maxDcCount; z++) {
+		for (var s = 0; s < rsBlocks.length; s++) {
+			if (z < dcdata[s].length) {
+				data[index++] = dcdata[s][z];
+			}
+		}
+	}
+
+	for (var xx = 0; xx < maxEcCount; xx++) {
+		for (var t = 0; t < rsBlocks.length; t++) {
+			if (xx < ecdata[t].length) {
+				data[index++] = ecdata[t][xx];
+			}
+		}
+	}
+
+	return data;
+
+};
+
+module.exports = QRCode;
+
+};
+
+function qrMatrix(text){
+  const bytes = unescape(encodeURIComponent(text));
+  const q = new (__qrreq('index'))(-1, 0);
+  q.addData(bytes); q.make();
+  return q.modules;
+}
+function qrSVG(text){
+  const m = qrMatrix(text), n = m.length;
+  let d='';
+  for(let y=0;y<n;y++){let x=0;while(x<n){if(m[y][x]){let s=x;while(x<n&&m[y][x])x++;d+='M'+s+' '+y+'h'+(x-s)+'v1h-'+(x-s)+'z';}else x++;}}
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 '+(n+4)+' '+(n+4)+'" shape-rendering="crispEdges"><rect x="-2" y="-2" width="'+(n+4)+'" height="'+(n+4)+'" fill="#fff"/><path d="'+d+'" fill="#000"/></svg>';
+}
+
+
+// ---------- storage helpers (plain browser localStorage -- works fully offline) ----------
+const STORE_KEY = 'utengule-itimba-labor-log';
+const WORKERS_STORE_KEY = 'utengule-itimba-extra-workers';
+let records = [];
+// every worker has an ID: [id, name] pairs from the master list, plus any added later
+let ALL_WORKERS = WORKERS.map(w=>({id:w[0], name:w[1]}));
+let storageReady = false;
+const BUILTIN_IDS = new Set(WORKERS.map(w=>w[0]));
+
+
+// tiny wrapper so the rest of the app can keep using get/set with the same shape
+// it used with window.storage -- but backed by localStorage, which needs no
+// network connection and works when this file is opened directly in a browser.
+const localStore = {
+  get(key){
+    try{
+      const raw = localStorage.getItem(key);
+      return raw==null ? null : {key, value: raw};
+    }catch(e){ return null; }
+  },
+  set(key, value){
+    try{ localStorage.setItem(key, value); return {key, value}; }
+    catch(e){ return null; }
+  }
+};
+
+async function loadRecords(){
+  try{
+    const res = localStore.get(STORE_KEY);
+    if(res && res.value){
+      records = JSON.parse(res.value);
+    } else {
+      records = SEED_RECORDS.slice();
+      localStore.set(STORE_KEY, JSON.stringify(records));
+    }
+  }catch(e){
+    records = SEED_RECORDS.slice();
+    try{ localStore.set(STORE_KEY, JSON.stringify(records)); }catch(e2){}
+  }
+  storageReady = true;
+}
+
+
+const normName = n => String(n||'').replace(/\s+/g,' ').trim();
+function workerById(id){ return ALL_WORKERS.find(w=>w.id===id); }
+function workersByName(name){ const k = normName(name).toLowerCase(); return ALL_WORKERS.filter(w=>w.name.toLowerCase()===k); }
+function nextWorkerId(name){
+  const L = /[A-Za-z]/.test(normName(name)[0]||'') ? normName(name)[0].toUpperCase() : 'X';
+  let mx = 0;
+  ALL_WORKERS.forEach(w=>{ if(w.id[0]===L){ const n = parseInt(w.id.slice(2),10); if(n>mx) mx = n; } });
+  return `${L}-${String(mx+1).padStart(3,'0')}`;
+}
+function persistExtraWorkers(){
+  try{
+    const extra = ALL_WORKERS.filter(w=>!BUILTIN_IDS.has(w.id));
+    localStore.set(WORKERS_STORE_KEY, JSON.stringify(extra));
+  }catch(e){}
+}
+function addWorkerToDb(name, phone){
+  const clean = normName(name);
+  const w = { id: nextWorkerId(clean), name: clean };
+  if(phone && String(phone).trim()) w.phone = String(phone).trim();
+  ALL_WORKERS.push(w);
+  persistExtraWorkers();
+  return w;
+}
+async function loadExtraWorkers(){
+  try{
+    const res = localStore.get(WORKERS_STORE_KEY);
+    if(res && res.value){
+      JSON.parse(res.value).forEach(w=>{ if(w && w.id && w.name && !workerById(w.id)) ALL_WORKERS.push(w.phone?{id:w.id, name:w.name, phone:w.phone}:{id:w.id, name:w.name}); });
+    }
+  }catch(e){}
+  // older records saved before IDs existed: attach the matching ID
+  let changed = false;
+  records.forEach(r=>{
+    if(!r.wid){ const m = workersByName(r.name); if(m.length){ r.wid = m[0].id; changed = true; } }
+  });
+  if(changed) await saveRecords();
+}
+function workerLabel(w){ return `${w.name} \u00b7 ${w.id}`; }
+function recordWorkerKey(r){ return r.wid || r.name; }
+
+async function saveRecords(){
+  try{ localStore.set(STORE_KEY, JSON.stringify(records)); }catch(e){}
+}
+
+// ---------- task categorisation ----------
+const CATEGORY_RULES = [
+  ['Pruning', ['pruning','sucker selection','desuckering','topping','shade regulation']],
+  ['Weeding', ['weeding','ring back','slashing','fire strip']],
+  ['Herbicide', ['herbicide']],
+  ['Fertilization', ['fertilization','compost preparation']],
+  ['Pests & Disease', ['fungicide','fusarium','mealybug','pesticide','snail','sterm borrer','pest']],
+  ['Harvesting', ['harvesting','fly picking','leftovers picking','coffee processing','coffee supporting','intake cleaning']],
+  ['Irrigation & Works', ['irrigation','pipe maintenance','factory maintenance','road maintenace','nursery upkeep','new field renovation','cutting trees','wood collection','gardening','field hygiene','sample preparation','charcoal grinding','conversion']],
+];
+function categorize(task){
+  if(!task) return 'Other';
+  const t = task.toLowerCase();
+  for(const [cat, keys] of CATEGORY_RULES){
+    if(keys.some(k => t.includes(k))) return cat;
+  }
+  return 'General / Other';
+}
+const CATEGORIES = CATEGORY_RULES.map(r=>r[0]).concat(['Harvesting','Irrigation & Works','General / Other']);
+const CATEGORY_LIST = ['Pruning','Weeding','Herbicide','Fertilization','Pests & Disease','Harvesting','Irrigation & Works','General / Other'];
+
+// ---------- utils ----------
+function fmt(n){ return n==null ? '' : n.toLocaleString('en-US'); }
+function dayName(dateStr){
+  if(!dateStr) return '';
+  const d = new Date(dateStr+'T00:00:00');
+  return d.toLocaleDateString('en-US', {weekday:'long'});
+}
+function isSunday(dateStr){
+  const d = new Date(dateStr+'T00:00:00');
+  return d.getDay() === 0;
+}
+// Fixed-date Tanzanian public holidays (movable holidays e.g. Eid/Easter are not included
+// since they change every year and aren't computable from a fixed rule).
+const TZ_PUBLIC_HOLIDAYS = {
+  '01-01': "New Year's Day",
+  '01-12': 'Zanzibar Revolution Day',
+  '04-07': 'Karume Day',
+  '04-26': 'Union Day',
+  '05-01': "Workers' Day",
+  '07-07': 'Saba Saba',
+  '08-08': 'Nane Nane',
+  '10-14': 'Nyerere Day',
+  '12-09': 'Independence Day',
+  '12-25': 'Christmas Day',
+  '12-26': 'Boxing Day',
+};
+function publicHolidayName(dateStr){
+  if(!dateStr) return '';
+  return TZ_PUBLIC_HOLIDAYS[dateStr.slice(5,10)] || '';
+}
+function isPublicHoliday(dateStr){ return !!publicHolidayName(dateStr); }
+function dayClass(dateStr){
+  if(isPublicHoliday(dateStr)) return 'holiday';
+  if(isSunday(dateStr)) return 'off';
+  return '';
+}
+function monthKey(dateStr){ return dateStr ? dateStr.slice(0,7) : ''; }
+function daysInMonth(ym){
+  const [y,m] = ym.split('-').map(Number);
+  return new Date(y, m, 0).getDate();
+}
+function uniqueSorted(arr){ return Array.from(new Set(arr)).sort(); }
+function monthLabel(ym){
+  const [y,m] = ym.split('-').map(Number);
+  return new Date(y, m-1, 1).toLocaleDateString('en-US',{month:'long', year:'numeric'});
+}
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+function shortDate(dateStr){
+  if(!dateStr) return '';
+  const d = new Date(dateStr+'T00:00:00');
+  return d.toLocaleDateString('en-US',{day:'numeric', month:'short'});
+}
+function niceDate(dateStr){
+  if(!dateStr) return '&mdash;';
+  const d = new Date(dateStr+'T00:00:00');
+  return d.toLocaleDateString('en-GB',{day:'2-digit', month:'short', year:'numeric'}).replace(/ /g,'-');
+}
+function dateRangeArray(start, end){
+  const out = [];
+  if(!start || !end) return out;
+  let d = new Date(start+'T00:00:00');
+  const last = new Date(end+'T00:00:00');
+  while(d<=last){
+    out.push(d.toISOString().slice(0,10));
+    d.setDate(d.getDate()+1);
+  }
+  return out;
+}
+function allDataDates(){
+  return uniqueSorted(records.map(r=>r.date)).filter(Boolean).sort();
+}
+function recordsInRange(start, end){
+  return records.filter(r=> r.date && (!start || r.date>=start) && (!end || r.date<=end));
+}
+function escCsv(v){
+  if(v==null) return '';
+  const s = String(v);
+  return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+}
+function downloadCsv(filename, rows){
+  const csv = rows.map(r=>r.map(escCsv).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Task & Plot breakdown for a date range -- the single source of truth used by
+// both the Task Summary breakdown table and the Contract/Voucher tab.
+function taskBreakdown(start, end){
+  const recs = recordsInRange(start, end);
+  const tasksUsed = uniqueSorted(recs.map(r=>r.task)).sort((a,b)=>a.localeCompare(b));
+  return tasksUsed.map(t=>{
+    const trecs = recs.filter(r=>r.task===t);
+    const plots = uniqueSorted(trecs.flatMap(r=>(r.plots||'').split(',').map(p=>p.trim()).filter(Boolean)));
+    const dates = uniqueSorted(trecs.map(r=>r.date)).sort();
+    const mandays = trecs.length;
+    const amt = trecs.reduce((s,r)=>s+Number(r.salary||0),0);
+    const rateCounts = {};
+    trecs.forEach(r=>{ rateCounts[r.salary] = (rateCounts[r.salary]||0)+1; });
+    const rateEntry = Object.entries(rateCounts).sort((a,b)=>b[1]-a[1])[0];
+    const rateLabel = rateEntry ? `${fmt(Number(rateEntry[0]))}/= per manrate` : '&mdash;';
+    return {
+      task: t, plots, mandays, amt, rateLabel,
+      start: dates[0] || start, end: dates[dates.length-1] || end,
+    };
+  });
+}
+
+// ---------- app state ----------
+let state = {
+  tab: 'register',
+  form: { workers:[], workerInput:'', date: todayISO(), salary: 6000, task:'', plots:[] },
+  plotFilter: '',
+  msSearch: {workers:'', plots:''},
+  open: {workers:false, plots:false},
+  badgeScope: 'log', badgeSearch: '',
+  scanInstant: false, scanLog: [],
+  badgeFormat: 'card',
+  newWorker: {name:'', phone:'', created:null, dupWarn:false, error:''},
+  logSearch: '', logMonth: '',
+  rangeStart: '', rangeEnd: '',
+  voucherTask: '', voucherContractor:'Osfai Njenda', voucherFarm:'Ut - Itimba',
+};
+
+function allMonths(){
+  return uniqueSorted(records.map(r=>monthKey(r.date))).filter(Boolean).sort().reverse();
+}
+
+function ensureRangeDefaults(){
+  const dates = allDataDates();
+  if(!state.rangeStart) state.rangeStart = dates[0] || todayISO();
+  if(!state.rangeEnd) state.rangeEnd = dates[dates.length-1] || todayISO();
+}
+
+function rangeControls(idPrefix){
+  return `
+    <div class="toolbar range-toolbar no-print">
+      <label>From <input type="date" id="${idPrefix}-start" value="${state.rangeStart}"></label>
+      <label>To <input type="date" id="${idPrefix}-end" value="${state.rangeEnd}"></label>
+      <span class="hint" style="margin:0;">Same period used across Monthly Summary, Task Summary and Contracts.</span>
+    </div>`;
+}
+function wireRangeControls(idPrefix){
+  const s = document.getElementById(`${idPrefix}-start`);
+  const e = document.getElementById(`${idPrefix}-end`);
+  if(s) s.onchange = ev=> setState({rangeStart: ev.target.value});
+  if(e) e.onchange = ev=> setState({rangeEnd: ev.target.value});
+}
+
+function setState(patch){
+  state = {...state, ...patch};
+  render();
+}
+
+// ---------- rendering ----------
+const app = document.getElementById('app');
+
+function render(){
+  stopScan();
+  ensureRangeDefaults();
+  const months = allMonths();
+
+  app.innerHTML = `
+    <header class="top">
+      <div class="brand">
+        <div class="mark">☕</div>
+        <div>
+          <h1>Utengule &ndash; Itimba Estate</h1>
+          <div class="sub">Casual Labor Register &amp; Payroll Summary</div>
+        </div>
+      </div>
+      <div class="stats">
+        <div><b>${records.length}</b>entries logged</div>
+        <div><b>${uniqueSorted(records.map(recordWorkerKey)).length}</b>workers this log</div>
+        <div><b>${ALL_WORKERS.length}</b>workers in database</div>
+        <div><b>${months.length}</b>months on file</div>
+      </div>
+    </header>
+    <nav class="tabs">
+      ${tabBtn('register','Register')}
+      ${tabBtn('log','Daily Log')}
+      ${tabBtn('monthly','Monthly Summary')}
+      ${tabBtn('tasks','Task Summary')}
+      ${tabBtn('voucher','Contract / Voucher')}
+      ${tabBtn('badges','ID Cards')}
+    </nav>
+    <div id="tab-content"></div>
+  `;
+  document.querySelectorAll('nav.tabs button').forEach(b=>{
+    b.onclick = ()=> setState({tab:b.dataset.tab});
+  });
+  const content = document.getElementById('tab-content');
+  if(state.tab==='register') content.innerHTML = renderRegister();
+  else if(state.tab==='log') content.innerHTML = renderLog();
+  else if(state.tab==='monthly') content.innerHTML = renderMonthly();
+  else if(state.tab==='tasks') content.innerHTML = renderTasks();
+  else if(state.tab==='voucher') content.innerHTML = renderVoucher();
+  else if(state.tab==='badges') content.innerHTML = renderBadges();
+  wireTab();
+}
+
+function tabBtn(id,label){
+  return `<button data-tab="${id}" class="${state.tab===id?'active':''}">${label}</button>`;
+}
+
+function datalist(id, arr){
+  return `<datalist id="${id}">${arr.map(v=>`<option value="${v.replace(/"/g,'&quot;')}">`).join('')}</datalist>`;
+}
+
+
+// ---------- small helpers ----------
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escAttr(s){ return escHtml(s).replace(/"/g,'&quot;'); }
+
+// ---------- multi-select dropdowns (Workers / Plots) with live count ----------
+const MS_CFG = {
+  workers:{ placeholder:'Select workers', unit:'worker', allowNew:true,
+    getSel:()=>state.form.workers, setSel:v=>{ state.form.workers = v; }, base:()=>ALL_WORKERS.map(w=>w.id),
+    label:v=>{ const w = workerById(v); return w ? workerLabel(w) : v; },
+    exists:t=>workersByName(t).length>0 },
+  plots:{ placeholder:'Select plots', unit:'plot', allowNew:false,
+    getSel:()=>state.form.plots, setSel:v=>{ state.form.plots = v; }, base:()=>PLOTS,
+    label:v=>v, exists:t=>PLOTS.some(p=>p.toLowerCase()===t.toLowerCase()) },
+};
+function msLabel(key){
+  const c = MS_CFG[key], n = c.getSel().length;
+  return n ? `${n} ${c.unit}${n===1?'':'s'} selected` : c.placeholder;
+}
+function msListHTML(key){
+  const c = MS_CFG[key], sel = c.getSel(), base = c.base();
+  const typed = (state.msSearch[key]||'').trim(), q = typed.toLowerCase();
+  const all = sel.filter(x=>!base.includes(x)).concat(base);
+  const shown = all.filter(o=>!q || c.label(o).toLowerCase().includes(q));
+  let html = shown.map(o=>`<label><input type="checkbox" data-ms-opt="${key}" value="${escAttr(o)}" ${sel.includes(o)?'checked':''}> ${escHtml(c.label(o))}</label>`).join('');
+  if(c.allowNew && typed && !c.exists(typed)){
+    html = `<button type="button" class="msel-addnew" data-ms-addnew="${key}">+ Add "${escHtml(typed)}" as a new ${c.unit} (gets a new ID — print the card from the ID Cards tab)</button>` + html;
+  }
+  return html || '<span class="chip-empty">Nothing matches.</span>';
+}
+function msChipsHTML(key){
+  const c = MS_CFG[key], sel = c.getSel();
+  return sel.map((v,i)=>`<span class="chip">${escHtml(c.label(v))}<button type="button" class="chip-remove" data-ms-remove="${key}" data-i="${i}">&times;</button></span>`).join('')
+    || '<span class="chip-empty">None selected yet.</span>';
+}
+function msHTML(key){
+  const open = state.open[key];
+  return `
+    <div class="msel" data-ms="${key}">
+      <button type="button" class="msel-trigger" data-ms-toggle="${key}">
+        <span class="msel-label" data-ms-label="${key}">${msLabel(key)}</span><span class="msel-caret">&#9662;</span>
+      </button>
+      <div class="msel-panel ${open?'open':''}" data-ms-panel="${key}">
+        <input class="field-input msel-search" data-ms-search="${key}" placeholder="Search${MS_CFG[key].allowNew?' or type a new name':''}..." value="${escAttr(state.msSearch[key]||'')}">
+        <div class="msel-list" data-ms-list="${key}">${msListHTML(key)}</div>
+        <div class="msel-actions">
+          <button type="button" class="secondary" data-ms-clear="${key}">Clear all</button>
+          <button type="button" class="primary" data-ms-done="${key}">Done</button>
+        </div>
+      </div>
+      <div class="worker-chips" data-ms-chips="${key}">${msChipsHTML(key)}</div>
+    </div>`;
+}
+function msRefreshSummary(key){
+  const l = document.querySelector(`[data-ms-label="${key}"]`); if(l) l.textContent = msLabel(key);
+  const ch = document.querySelector(`[data-ms-chips="${key}"]`);
+  if(ch){ ch.innerHTML = msChipsHTML(key); bindMsChips(key); }
+}
+function bindMsChips(key){
+  document.querySelectorAll(`[data-ms-remove="${key}"]`).forEach(b=>{
+    b.onclick = ()=>{
+      const c = MS_CFG[key], sel = c.getSel().slice();
+      sel.splice(Number(b.dataset.i),1); c.setSel(sel);
+      msRefreshList(key); msRefreshSummary(key);
+    };
+  });
+}
+function bindMsList(key){
+  const c = MS_CFG[key];
+  document.querySelectorAll(`[data-ms-opt="${key}"]`).forEach(cb=>{
+    cb.onchange = ()=>{
+      let sel = c.getSel().slice();
+      if(cb.checked){ if(!sel.includes(cb.value)) sel.push(cb.value); }
+      else sel = sel.filter(v=>v!==cb.value);
+      c.setSel(sel); msRefreshSummary(key);
+    };
+  });
+  const add = document.querySelector(`[data-ms-addnew="${key}"]`);
+  if(add) add.onclick = ()=>{
+    const typed = (state.msSearch[key]||'').trim();
+    const sel = c.getSel().slice();
+    const val = key==='workers' && typed ? addWorkerToDb(typed).id : typed;
+    if(val && !sel.includes(val)) sel.push(val);
+    c.setSel(sel);
+    state.msSearch[key] = '';
+    const si = document.querySelector(`[data-ms-search="${key}"]`); if(si) si.value = '';
+    msRefreshList(key); msRefreshSummary(key);
+  };
+}
+function msRefreshList(key){
+  const el = document.querySelector(`[data-ms-list="${key}"]`);
+  if(el){ el.innerHTML = msListHTML(key); bindMsList(key); }
+}
+function wireMs(key){
+  const panel = document.querySelector(`[data-ms-panel="${key}"]`);
+  const trig = document.querySelector(`[data-ms-toggle="${key}"]`);
+  const search = document.querySelector(`[data-ms-search="${key}"]`);
+  if(!panel || !trig) return;
+  trig.onclick = ()=>{
+    state.open[key] = !state.open[key];
+    panel.classList.toggle('open', state.open[key]);
+    if(state.open[key] && search) search.focus();
+  };
+  search.oninput = e=>{ state.msSearch[key] = e.target.value; msRefreshList(key); };
+  document.querySelector(`[data-ms-clear="${key}"]`).onclick = ()=>{
+    MS_CFG[key].setSel([]); msRefreshList(key); msRefreshSummary(key);
+  };
+  document.querySelector(`[data-ms-done="${key}"]`).onclick = ()=>{
+    state.open[key] = false; panel.classList.remove('open');
+  };
+  bindMsList(key); bindMsChips(key);
+}
+
+// ---------- QR badge scanning ----------
+const BADGE_PREFIX = 'UTW:';
+let scanStream = null, scanTimer = null, lastScan = {v:'', t:0};
+function badgePayload(w){ return BADGE_PREFIX + w.id; }
+function parseBadge(text){
+  let t = String(text||'').trim();
+  if(t.toUpperCase().startsWith(BADGE_PREFIX)) t = t.slice(BADGE_PREFIX.length);
+  return t.trim();
+}
+// accepts a badge ID (A-001), "UTW:A-001", or a plain name
+function resolveWorker(raw){
+  const code = parseBadge(raw);
+  if(!code) return null;
+  if(/^[A-Za-z]-\d{3,}$/.test(code)){
+    const w = workerById(code.toUpperCase());
+    return w ? { w, isNew:false } : { error: `ID ${code.toUpperCase()} is not in the database.` };
+  }
+  const m = workersByName(code);
+  if(m.length>1) return { error: `${normName(code)} matches ${m.length} workers (${m.map(x=>x.id).join(', ')}) \u2014 scan the card or type the ID.` };
+  if(m.length===1) return { w:m[0], isNew:false };
+  return { w: addWorkerToDb(code), isNew:true };
+}
+function addWorkerByCode(raw){
+  const r = resolveWorker(raw);
+  if(!r || r.error) return r;
+  const dup = state.form.workers.includes(r.w.id);
+  if(!dup) state.form.workers = state.form.workers.concat([r.w.id]);
+  return { name:r.w.name, id:r.w.id, dup, isNew:r.isNew };
+}
+// Scan Entry mode: every scan is saved as a finished record straight away
+function registerScan(raw){
+  const r = resolveWorker(raw);
+  if(!r || r.error) return r;
+  const f = state.form;
+  if(!f.date || !f.task.trim() || !f.plots.length) return { error:'Choose the Date, Task and at least one Plot first, then scan.' };
+  const exists = records.find(x=>x.wid===r.w.id && x.date===f.date && x.task===f.task.trim());
+  if(exists) return { name:r.w.name, id:r.w.id, dup:true, instant:true };
+  const rec = {
+    id: records.reduce((m,x)=>Math.max(m,x.id||0),0)+1,
+    wid:r.w.id, name:r.w.name, date:f.date, day:dayName(f.date),
+    salary:Number(f.salary), task:f.task.trim(), plots:f.plots.join(', '),
+  };
+  records.push(rec);
+  saveRecords();
+  state.scanLog.unshift({ rid:rec.id, id:r.w.id, name:r.w.name });
+  return { name:r.w.name, id:r.w.id, dup:false, isNew:r.isNew, instant:true };
+}
+function scanLogHTML(){
+  if(!state.scanLog.length) return '';
+  return `<div class="scan-log-head"><b>${state.scanLog.length} registered this session</b>
+      <span><button type="button" class="secondary" id="btn-scan-undo">Undo last</button></span></div>
+    <div class="scan-log-list">${state.scanLog.map(x=>`<div>${escHtml(x.id)} &middot; ${escHtml(x.name)}</div>`).join('')}</div>`;
+}
+function refreshScanLog(){
+  const el = document.getElementById('scan-log');
+  if(!el) return;
+  el.innerHTML = scanLogHTML();
+  const u = document.getElementById('btn-scan-undo');
+  if(u) u.onclick = async ()=>{
+    const last = state.scanLog.shift();
+    if(last){ records = records.filter(x=>x.id!==last.rid); await saveRecords(); }
+    refreshScanLog();
+    const st = document.getElementById('scan-status');
+    if(st && last){ st.className='msg'; st.textContent = `Removed ${last.name} (${last.id}).`; }
+  };
+}
+function handleScan(raw){
+  return state.scanInstant ? registerScan(raw) : addWorkerByCode(raw);
+}
+function scanFeedback(res){
+  const st = document.getElementById('scan-status');
+  if(!st) return;
+  if(!res || res.error){ st.className = 'msg err'; st.textContent = res ? res.error : 'Could not read that code.'; return; }
+  if(res.instant){
+    refreshScanLog();
+    st.className = res.dup ? 'msg err' : 'msg ok';
+    st.textContent = res.dup
+      ? `${res.name} (${res.id}) is already registered for this task today.`
+      : `Registered ${res.name} (${res.id})${res.isNew?' \u2014 new worker':''} \u2014 ${state.scanLog.length} this session.`;
+  } else {
+    msRefreshList('workers'); msRefreshSummary('workers');
+    const n = state.form.workers.length;
+    st.className = res.dup ? 'msg err' : 'msg ok';
+    st.textContent = res.dup
+      ? `${res.name} (${res.id}) is already in the list \u2014 ${n} selected.`
+      : `Added ${res.name} (${res.id})${res.isNew?' \u2014 new worker':''} \u2014 ${n} selected.`;
+  }
+  try{ if(navigator.vibrate) navigator.vibrate(res.dup?[60,40,60]:80); }catch(e){}
+}
+async function startScan(){
+  const st = document.getElementById('scan-status');
+  const video = document.getElementById('scan-video');
+  if(!('BarcodeDetector' in window)){
+    st.className = 'msg err';
+    st.textContent = 'This browser cannot read QR codes with the camera. Use Chrome or Edge (Android or PC), or type/scan the code in the box below.';
+    return;
+  }
+  try{
+    scanStream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:'environment' } });
+  }catch(e){
+    st.className = 'msg err';
+    st.textContent = 'Camera access was blocked. Allow the camera for this page, or type the code in the box below.';
+    return;
+  }
+  video.srcObject = scanStream;
+  try{ await video.play(); }catch(e){}
+  st.className = 'msg'; st.textContent = 'Point the camera at a worker badge.';
+  const det = new BarcodeDetector({ formats:['qr_code'] });
+  scanTimer = setInterval(async ()=>{
+    try{
+      const codes = await det.detect(video);
+      if(!codes.length) return;
+      const v = codes[0].rawValue, now = Date.now();
+      if(v === lastScan.v && now - lastScan.t < 2500) return;
+      lastScan = { v, t: now };
+      scanFeedback(handleScan(v));
+    }catch(e){}
+  }, 300);
+}
+function stopScan(){
+  if(scanTimer){ clearInterval(scanTimer); scanTimer = null; }
+  if(scanStream){ scanStream.getTracks().forEach(t=>t.stop()); scanStream = null; }
+}
+
+// ---- Register tab ----
+function renderRegister(){
+  const f = state.form;
+  return `
+  <div class="panel">
+    <h2>New Daily Entry</h2>
+    <div class="hint">Records one worker's task for one day &mdash; mirrors the original "Save And Register" form.</div>
+    <div class="reg-grid">
+      <label>Workers</label>
+      <div>
+        ${msHTML('workers')}
+        <div class="scan-box no-print">
+          <button type="button" class="secondary" id="btn-scan-toggle">&#128247; Scan worker ID card</button>
+          <div class="scan-panel" id="scan-panel">
+            <video id="scan-video" playsinline muted></video>
+            <div id="scan-status" class="msg">Press the button to start the camera.</div>
+            <label class="scan-instant"><input type="checkbox" id="scan-instant" ${state.scanInstant?'checked':''}> <b>Scan Entry mode</b> &mdash; save each scan straight away using the date, salary, task and plots chosen above</label>
+            <input class="field-input" id="scan-manual" placeholder="Or type / scan a worker ID (e.g. A-001) and press Enter">
+            <div id="scan-log" class="scan-log">${scanLogHTML()}</div>
+          </div>
+        </div>
+      </div>
+
+      <label for="f-date">Date</label>
+      <input type="date" id="f-date" value="${f.date}">
+
+      <label>Day</label>
+      <div class="day-display">${dayName(f.date) || '&mdash;'}</div>
+
+      <label>Salary</label>
+      <div class="salary-options" id="f-salary">
+        ${SALARY_OPTIONS.map(s=>`
+          <label class="${Number(f.salary)===s?'checked':''}">
+            <input type="radio" name="salary" value="${s}" ${Number(f.salary)===s?'checked':''}>
+            ${fmt(s)} TZS
+          </label>`).join('')}
+      </div>
+
+      <label for="f-task">Task</label>
+      <div>
+        <input class="field-input" list="tasks-list" id="f-task" value="${f.task.replace(/"/g,'&quot;')}" placeholder="Select or type a task">
+        ${datalist('tasks-list', TASKS)}
+      </div>
+
+      <label>Plots</label>
+      <div>
+        ${msHTML('plots')}
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="primary" id="btn-submit">Save &amp; Register</button>
+      <button class="secondary" id="btn-clear">Clear Form</button>
+    </div>
+    <div id="form-msg"></div>
+  </div>
+  `;
+}
+
+// ---- Daily Log tab ----
+function renderLog(){
+  const months = allMonths();
+  let rows = records.slice().sort((a,b)=> (b.date||'').localeCompare(a.date||'') || b.id-a.id);
+  if(state.logMonth) rows = rows.filter(r=>monthKey(r.date)===state.logMonth);
+  if(state.logSearch){
+    const q = state.logSearch.toLowerCase();
+    rows = rows.filter(r=> (r.name||'').toLowerCase().includes(q) || (r.wid||'').toLowerCase().includes(q) || (r.task||'').toLowerCase().includes(q) || (r.plots||'').toLowerCase().includes(q));
+  }
+  return `
+  <div class="panel">
+    <h2>Daily Register Log</h2>
+    <div class="hint">Every submitted entry, newest first &mdash; equivalent to the workbook's Output sheet.</div>
+    <div class="toolbar">
+      <label>Month
+        <select id="log-month-sel">
+          <option value="">All months</option>
+          ${months.map(m=>`<option value="${m}" ${state.logMonth===m?'selected':''}>${monthLabel(m)}</option>`).join('')}
+        </select>
+      </label>
+      <input class="search-box field-input" id="log-search" placeholder="Search name / task / plot" value="${state.logSearch.replace(/"/g,'&quot;')}">
+      <span class="badge">${rows.length} shown</span>
+      <button class="secondary no-print" id="btn-export-log" style="margin-left:auto;">Export CSV</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Date</th><th>Day</th><th>ID</th><th class="name-cell">Name</th><th>Task</th><th>Plots</th><th>Salary</th><th></th>
+        </tr></thead>
+        <tbody>
+          ${rows.length ? rows.map(r=>`
+            <tr>
+              <td>${r.date||''}</td>
+              <td>${r.day||dayName(r.date)}</td>
+              <td>${r.wid||''}</td>
+              <td class="name-cell">${r.name||''}</td>
+              <td>${r.task||''}</td>
+              <td style="text-align:left;">${r.plots||''}</td>
+              <td class="amt">${fmt(r.salary)}</td>
+              <td><button class="secondary no-print" data-del="${r.id}" style="padding:3px 9px;font-size:.75rem;">Delete</button></td>
+            </tr>
+          `).join('') : `<tr><td colspan="8" class="empty-state">No entries for this filter.</td></tr>`}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel no-print">
+    <h2>Sync Between Devices</h2>
+    <div class="hint">This file saves data only on this device's browser. To move data to another phone or computer, export a backup file here and import it there &mdash; via WhatsApp, email, Google Drive, USB, however you'd normally send a file. Importing merges new entries in, it never deletes existing ones on the other device.</div>
+    <div class="toolbar">
+      <button class="primary" id="btn-export-backup">Export Backup File</button>
+      <label class="secondary" style="display:inline-flex;align-items:center;padding:11px 22px;border-radius:8px;border:1.5px solid var(--coffee-light);cursor:pointer;font-weight:700;">
+        Import Backup File
+        <input type="file" id="btn-import-backup" accept="application/json" style="display:none;">
+      </label>
+      <span id="import-msg" class="msg"></span>
+    </div>
+  </div>
+  `;
+}
+
+
+// ---- ID Cards tab (printable worker ID cards with QR) ----
+function badgeNames(){
+  const q = (state.badgeSearch||'').trim().toLowerCase();
+  const inLog = new Set(records.map(recordWorkerKey));
+  let list = state.badgeScope==='log'
+    ? ALL_WORKERS.filter(w=>inLog.has(w.id) || inLog.has(w.name))
+    : ALL_WORKERS.slice();
+  list.sort((a,b)=>a.id[0].localeCompare(b.id[0]) || parseInt(a.id.slice(2),10)-parseInt(b.id.slice(2),10));
+  return list.filter(w=>!q || w.name.toLowerCase().includes(q) || w.id.toLowerCase().includes(q));
+}
+function badgeCardHTML(w){
+  return `<div class="id-card">
+    <div class="idc-head"><b>UTENGULE ESTATES TZ LTD</b><span>UT &ndash; ITIMBA FARM &middot; WORKER ID CARD</span></div>
+    <div class="idc-body">
+      <div class="idc-photo">PHOTO</div>
+      <div class="idc-info"><div class="idc-name">${escHtml(w.name)}</div><div class="idc-id">${escHtml(w.id)}</div><div class="idc-sub">Casual Labour${w.phone?` &middot; Tel ${escHtml(w.phone)}`:''}</div></div>
+      <div class="idc-qr">${qrSVG(badgePayload(w))}</div>
+    </div>
+    <div class="idc-foot">Scan this card at the register &middot; Report loss to the office</div>
+  </div>`;
+}
+function qrStickerHTML(w){
+  return `<div class="qr-sticker"><div class="qs-q">${qrSVG(badgePayload(w))}</div><div class="qs-t"><b>${escHtml(w.id)}</b><span>${escHtml(w.name)}</span></div></div>`;
+}
+function itemHTML(w){ return state.badgeFormat==='sticker' ? qrStickerHTML(w) : badgeCardHTML(w); }
+function printHtmlSheets(html){
+  let container = document.getElementById('print-all-vouchers');
+  if(!container){ container = document.createElement('div'); container.id = 'print-all-vouchers'; document.body.appendChild(container); }
+  container.innerHTML = html;
+  document.body.classList.add('printing-all');
+  window.print();
+  const cleanup = ()=>{ document.body.classList.remove('printing-all'); window.removeEventListener('afterprint', cleanup); };
+  window.addEventListener('afterprint', cleanup);
+}
+function printSingle(w, format){
+  const sticker = format==='sticker';
+  printHtmlSheets(`<div class="print-sheet ${sticker?'sticker-sheet':'id-sheet'}"><div class="${sticker?'sticker-grid':'id-grid'}">${sticker?qrStickerHTML(w):badgeCardHTML(w)}</div></div>`);
+}
+function downloadFile(name, blob){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url), 1500);
+}
+function downloadQrSvg(w){ downloadFile(`${w.id}-QR.svg`, new Blob([qrSVG(badgePayload(w))], {type:'image/svg+xml'})); }
+function downloadQrPng(w){
+  const m = qrMatrix(badgePayload(w)), n = m.length, px = 20, pad = 2, size = (n+pad*2)*px;
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0,0,size,size); g.fillStyle = '#000';
+  for(let y=0;y<n;y++) for(let x=0;x<n;x++) if(m[y][x]) g.fillRect((x+pad)*px,(y+pad)*px,px,px);
+  c.toBlob(b=>downloadFile(`${w.id}-QR.png`, b), 'image/png');
+}
+
+// ---- New worker form: create an ID + card + QR for someone not in the database ----
+function renderNewWorker(){
+  const nw = state.newWorker;
+  if(nw.created){
+    const w = nw.created;
+    return `<div class="panel no-print">
+      <h2>New worker created</h2>
+      <div class="msg ok" style="margin:0 0 12px;">${escHtml(w.name)} is saved in the database with ID <b>${escHtml(w.id)}</b>. The card below is ready to print and the QR scans on the Register tab.</div>
+      <div class="id-grid" style="grid-template-columns:85.6mm;">${badgeCardHTML(w)}</div>
+      <div class="toolbar" style="margin-top:14px;">
+        <button class="primary" id="btn-nw-print-card">Print ID card</button>
+        <button class="secondary" id="btn-nw-print-qr">Print QR sticker</button>
+        <button class="secondary" id="btn-nw-dl-png">Download QR (PNG)</button>
+        <button class="secondary" id="btn-nw-dl-svg">Download QR (SVG)</button>
+        <button class="secondary" id="btn-nw-another" style="margin-left:auto;">+ Add another worker</button>
+      </div></div>`;
+  }
+  const dups = nw.dupWarn ? workersByName(nw.name) : [];
+  return `<div class="panel no-print">
+    <h2>Add a New Worker</h2>
+    <div class="hint">Not in the database yet? Enter the details and the app creates the next free ID, saves the worker, and gives you the ID card and QR code straight away.</div>
+    <div class="reg-grid" style="max-width:560px;">
+      <label for="nw-name">Full name</label><input class="field-input" id="nw-name" value="${escAttr(nw.name)}" placeholder="First name and surname">
+      <label for="nw-phone">Phone (optional)</label><input class="field-input" id="nw-phone" value="${escAttr(nw.phone)}" placeholder="e.g. 0712 345 678">
+    </div>
+    ${nw.error?`<div class="msg err">${escHtml(nw.error)}</div>`:''}
+    ${dups.length?`<div class="msg err">A worker with this name already exists: ${dups.map(d=>escHtml(d.id)).join(', ')}. If this is a different person with the same name, create anyway &mdash; they get their own ID.</div>`:''}
+    <div class="btn-row">
+      <button class="primary" id="btn-nw-generate">${dups.length?'Create anyway as a new person':'Generate ID, card &amp; QR'}</button>
+    </div></div>`;
+}
+function wireNewWorker(){
+  const nw = state.newWorker;
+  if(nw.created){
+    const w = nw.created;
+    document.getElementById('btn-nw-print-card').onclick = ()=> printSingle(w,'card');
+    document.getElementById('btn-nw-print-qr').onclick = ()=> printSingle(w,'sticker');
+    document.getElementById('btn-nw-dl-png').onclick = ()=> downloadQrPng(w);
+    document.getElementById('btn-nw-dl-svg').onclick = ()=> downloadQrSvg(w);
+    document.getElementById('btn-nw-another').onclick = ()=>{ state.newWorker = {name:'',phone:'',created:null,dupWarn:false,error:''}; render(); };
+    return;
+  }
+  document.getElementById('nw-name').oninput = e=>{ nw.name = e.target.value; };
+  document.getElementById('nw-phone').oninput = e=>{ nw.phone = e.target.value; };
+  document.getElementById('btn-nw-generate').onclick = ()=>{
+    nw.error = '';
+    if(normName(nw.name).split(' ').filter(Boolean).length < 2){ nw.error = 'Please enter the first name and surname.'; nw.dupWarn = false; render(); return; }
+    if(!nw.dupWarn && workersByName(nw.name).length){ nw.dupWarn = true; render(); return; }
+    nw.created = addWorkerToDb(nw.name, nw.phone);
+    nw.dupWarn = false;
+    render();
+  };
+}
+
+function renderBadges(){
+  const names = badgeNames();
+  const preview = names.slice(0,6);
+  const per = state.badgeFormat==='sticker' ? 24 : 10;
+  const sheets = Math.ceil(names.length/per);
+  return renderNewWorker() + `
+  <div class="panel">
+    <h2>Worker ID Cards &amp; QR Codes</h2>
+    <div class="hint">One ID card per worker (credit-card size, 10 per A4 sheet): company name, photo box, name, ID and a QR code. On the Register tab, scanning the card adds the worker &mdash; or registers them straight away in Scan Entry mode. Paste a photo in the box, cut along the border and laminate.</div>
+    <div class="toolbar no-print">
+      <label>Print cards for
+        <select id="badge-scope">
+          <option value="log" ${state.badgeScope==='log'?'selected':''}>Workers already in the log</option>
+          <option value="all" ${state.badgeScope==='all'?'selected':''}>Everyone in the database (${ALL_WORKERS.length})</option>
+        </select>
+      </label>
+      <label>Format
+        <select id="badge-format">
+          <option value="card" ${state.badgeFormat!=='sticker'?'selected':''}>ID card (10 per sheet)</option>
+          <option value="sticker" ${state.badgeFormat==='sticker'?'selected':''}>QR stickers only (24 per sheet)</option>
+        </select>
+      </label>
+      <input class="search-box field-input" id="badge-search" placeholder="Filter by name or ID" value="${escAttr(state.badgeSearch||'')}">
+      <span class="badge">${names.length} card${names.length===1?'':'s'} &middot; ${sheets} sheet${sheets===1?'':'s'}</span>
+      <button class="primary" id="btn-print-badges" style="margin-left:auto;" ${names.length?'':'disabled'}>Print ${state.badgeFormat==='sticker'?'QR Stickers':'ID Cards'}</button>
+    </div>
+    ${names.length ? `<div class="${state.badgeFormat==='sticker'?'sticker-grid':'id-grid'}">${preview.map(itemHTML).join('')}</div>
+      ${names.length>6 ? `<div class="hint" style="margin-top:10px;">Showing the first 6 as a preview &mdash; all ${names.length} print.</div>`:''}`
+      : `<div class="empty-state">No workers to show yet &mdash; register some entries, or choose "Everyone in the database".</div>`}
+  </div>`;
+}
+function printBadges(){
+  const names = badgeNames();
+  const sticker = state.badgeFormat==='sticker', per = sticker ? 24 : 10;
+  const sheets = [];
+  for(let i=0;i<names.length;i+=per) sheets.push(names.slice(i,i+per));
+  printHtmlSheets(sheets.map(g=>`<div class="print-sheet ${sticker?'sticker-sheet':'id-sheet'}"><div class="${sticker?'sticker-grid':'id-grid'}">${g.map(itemHTML).join('')}</div></div>`).join(''));
+}
+
+// ---- Backup export/import (manual cross-device sync) ----
+function exportBackup(){
+  const payload = {
+    exportedAt: new Date().toISOString(),
+    records,
+    extraWorkers: ALL_WORKERS.filter(w=>!BUILTIN_IDS.has(w.id)),
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `utengule-itimba-backup-${todayISO()}.json`; a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function importBackupFile(file){
+  const data = JSON.parse(await file.text());
+  const incoming = Array.isArray(data.records) ? data.records : [];
+  // map workers created on the other device onto this device's IDs
+  const idMap = {};
+  let addedWorkers = 0;
+  (Array.isArray(data.extraWorkers) ? data.extraWorkers : []).forEach(w=>{
+    if(!w || !w.id || !w.name) return;
+    const same = workerById(w.id);
+    if(same && same.name.toLowerCase()===w.name.toLowerCase()){ idMap[w.id] = same.id; return; }
+    const byName = workersByName(w.name);
+    if(byName.length){ idMap[w.id] = byName[0].id; return; }
+    if(same){ const nw = addWorkerToDb(w.name); idMap[w.id] = nw.id; addedWorkers++; return; }
+    ALL_WORKERS.push(w.phone?{id:w.id, name:normName(w.name), phone:w.phone}:{id:w.id, name:normName(w.name)}); idMap[w.id] = w.id; addedWorkers++;
+  });
+  persistExtraWorkers();
+  const keyOf = r=>`${r.wid||r.name}|${r.date}|${r.task}|${r.plots}|${r.salary}`;
+  const existingKeys = new Set(records.map(keyOf));
+  let added = 0;
+  let maxId = records.reduce((m,r)=>Math.max(m,r.id||0),0);
+  incoming.forEach(r0=>{
+    const r = {...r0};
+    if(r.wid && idMap[r.wid]) r.wid = idMap[r.wid];
+    const w = r.wid ? workerById(r.wid) : (workersByName(r.name)[0]);
+    if(w){ r.wid = w.id; r.name = w.name; }
+    const key = keyOf(r);
+    if(!existingKeys.has(key)){ maxId += 1; records.push({...r, id:maxId}); existingKeys.add(key); added += 1; }
+  });
+  await saveRecords();
+  return { added, addedWorkers };
+}
+
+// ---- Monthly Summary tab (screenshot 2 style) ----
+function renderMonthly(){
+  const start = state.rangeStart, end = state.rangeEnd;
+  const dateList = dateRangeArray(start, end);
+  if(!dateList.length){
+    return `<div class="panel"><h2>Monthly Summary</h2><div class="empty-state"><div class="big">🗓️</div>No dated entries yet &mdash; register some workdays first.</div></div>`;
+  }
+  const recs = recordsInRange(start, end);
+  const info = {};
+  recs.forEach(r=>{ const k = recordWorkerKey(r); if(!info[k]) info[k] = {name:r.name, id:r.wid||''}; });
+  const names = Object.keys(info).sort((a,b)=>info[a].name.localeCompare(info[b].name) || a.localeCompare(b));
+  // date -> name -> total
+  const byNameDate = {};
+  names.forEach(n=> byNameDate[n] = {});
+  recs.forEach(r=>{
+    const k = recordWorkerKey(r); byNameDate[k][r.date] = (byNameDate[k][r.date]||0) + Number(r.salary||0);
+  });
+  const grandTotal = recs.reduce((s,r)=>s+Number(r.salary||0),0);
+
+  let head = `<th>ID</th><th class="name-cell">Name</th>`;
+  dateList.forEach(iso=>{
+    const cls = dayClass(iso);
+    const title = isPublicHoliday(iso) ? ` title="${publicHolidayName(iso)}"` : '';
+    head += `<th class="${cls}"${title}>${shortDate(iso)}</th>`;
+  });
+  head += `<th class="total-h">Total</th><th>Signature</th>`;
+
+  let body = names.map(n=>{
+    let total = 0;
+    let cells = '';
+    dateList.forEach(iso=>{
+      const val = byNameDate[n][iso];
+      const cls = dayClass(iso);
+      if(val){ total += val; cells += `<td class="amt">${fmt(val)}</td>`; }
+      else { cells += `<td class="${cls || 'blank'}">${cls ? '' : '&ndash;'}</td>`; }
+    });
+    return `<tr><td>${info[n].id}</td><td class="name-cell">${escHtml(info[n].name)}</td>${cells}<td class="total">${fmt(total)}</td><td class="sig"></td></tr>`;
+  }).join('');
+
+  return `
+  <div class="panel">
+    <h2>Monthly Summary</h2>
+    <div class="hint">One row per worker, one column per day from ${niceDate(start)} to ${niceDate(end)}. <span class="legend-off">Sundays</span> and <span class="legend-holiday">public holidays</span> are shaded. Mirrors the "END MONTH" payroll sheet.</div>
+    ${rangeControls('sum')}
+    <div class="toolbar">
+      <span class="badge">${names.length} workers</span>
+      <span class="badge">Total payout: ${fmt(grandTotal)} TZS</span>
+      <button class="secondary no-print" id="btn-print-monthly" style="margin-left:auto;">Print</button>
+    </div>
+    <div class="table-wrap">
+      <table><thead><tr>${head}</tr></thead><tbody>${body || `<tr><td colspan="99" class="empty-state">No entries.</td></tr>`}</tbody></table>
+    </div>
+  </div>
+  `;
+}
+
+// ---- Task Summary tab (screenshot 3 style, by worker count per task) ----
+function renderTasks(){
+  const start = state.rangeStart, end = state.rangeEnd;
+  const dateList = dateRangeArray(start, end);
+  if(!dateList.length){
+    return `<div class="panel"><h2>Task Summary</h2><div class="empty-state"><div class="big">🌱</div>No dated entries yet.</div></div>`;
+  }
+  const recs = recordsInRange(start, end);
+  const tasksUsed = uniqueSorted(recs.map(r=>r.task)).sort((a,b)=>a.localeCompare(b));
+
+  // date -> task -> {workers, amount}
+  const grid = {};
+  dateList.forEach(iso=> grid[iso] = {});
+  recs.forEach(r=>{
+    if(!grid[r.date][r.task]) grid[r.date][r.task] = {workers:0, amt:0};
+    grid[r.date][r.task].workers += 1;
+    grid[r.date][r.task].amt += Number(r.salary||0);
+  });
+  const breakdown = taskBreakdown(start, end);
+  const taskTotals = {}; breakdown.forEach(b=> taskTotals[b.task] = b);
+  const grandWorkers = recs.length;
+  const grandAmt = recs.reduce((s,r)=>s+Number(r.salary||0),0);
+
+  let head = `<th>Date</th>` + tasksUsed.map(t=>`<th title="Plots: ${taskTotals[t].plots.join(', ')||'&mdash;'}">${t}</th>`).join('') + `<th class="total-h">Day Workers</th>`;
+  let body = '';
+  dateList.forEach(iso=>{
+    let rowWorkers = 0;
+    const cells = tasksUsed.map(t=>{
+      const cell = grid[iso][t];
+      if(cell && cell.workers){ rowWorkers += cell.workers; return `<td class="amt">${cell.workers}</td>`; }
+      return `<td class="blank">&ndash;</td>`;
+    }).join('');
+    if(rowWorkers===0) return;
+    const cls = dayClass(iso);
+    body += `<tr><td class="name-cell ${cls}">${iso}${isPublicHoliday(iso)?` &mdash; ${publicHolidayName(iso)}`:''}</td>${cells}<td class="total">${rowWorkers}</td></tr>`;
+  });
+  const workersRow = `<tr><td class="name-cell">Total Workers</td>${tasksUsed.map(t=>`<td class="total">${taskTotals[t].mandays}</td>`).join('')}<td class="total">${grandWorkers}</td></tr>`;
+  const amtRow = `<tr><td class="name-cell">Total Amount</td>${tasksUsed.map(t=>`<td class="amt">${fmt(taskTotals[t].amt)}</td>`).join('')}<td class="total">${fmt(grandAmt)}</td></tr>`;
+
+  const plotRows = tasksUsed.map(t=>`
+    <tr>
+      <td class="name-cell">${t}</td>
+      <td style="text-align:left;">${taskTotals[t].plots.join(', ') || '&mdash;'}</td>
+      <td class="total">${taskTotals[t].mandays}</td>
+      <td class="amt">${fmt(taskTotals[t].amt)}</td>
+    </tr>`).join('');
+
+  return `
+  <div class="panel">
+    <h2>Task Summary</h2>
+    <div class="hint">Every task performed from ${niceDate(start)} to ${niceDate(end)}, by date, counted by number of workers &mdash; mirrors the Pruning / Weeding / Herbicide / Fertilization / Pests sheet, one column per actual task. Hover a task header to see its plots. <span class="legend-off">Sundays</span> and <span class="legend-holiday">public holidays</span> are shaded on the date column.</div>
+    ${rangeControls('task')}
+    <div class="toolbar">
+      <span class="badge">${tasksUsed.length} tasks</span>
+      <span class="badge">${grandWorkers} total workers</span>
+      <span class="badge">Total spend: ${fmt(grandAmt)} TZS</span>
+      <button class="secondary no-print" id="btn-print-tasks" style="margin-left:auto;">Print</button>
+    </div>
+    <div class="table-wrap">
+      <table><thead><tr>${head}</tr></thead><tbody>${body}${workersRow}${amtRow}</tbody></table>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Task &amp; Plot Breakdown</h2>
+    <div class="hint">Which plots each task was carried out on in this period, with total workers and cost &mdash; this exact table is what feeds the Contract/Voucher tab.</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="name-cell">Task</th><th>Plots Worked</th><th>Total Workers</th><th>Total Amount</th></tr></thead>
+        <tbody>${plotRows || `<tr><td colspan="4" class="empty-state">No entries.</td></tr>`}</tbody>
+      </table>
+    </div>
+  </div>
+  `;
+}
+
+// ---- Contract / Voucher tab (screenshot 4 style) ----
+function voucherBlockHTML(entry, contractor){
+  const estDays = (entry.start && entry.end)
+    ? Math.round((new Date(entry.end)-new Date(entry.start))/(1000*3600*24)) + 1
+    : '&mdash;';
+  return `
+    <div class="voucher">
+      <div class="v-topbar">
+        <span class="v-tag">CONTRACT</span>
+        <div class="v-boxes">
+          <div class="v-box">Voucher No.<b>&nbsp;</b></div>
+          <div class="v-box">Code<b>&nbsp;</b></div>
+        </div>
+      </div>
+      <div class="v-head">UTENGULE ESTATES TZ LTD</div>
+      <div class="v-row"><div class="k">Contractor's Name</div><div class="v">${contractor || '&mdash;'}</div></div>
+      <div class="v-row"><div class="k">Farm</div><div class="v">UT &ndash; ITIMBA</div></div>
+      <div class="v-row"><div class="k">Plot Place</div><div class="v">${entry.plots.join('; ') || '&mdash;'}</div></div>
+      <div class="v-work">WORK TO BE DONE: ${entry.task.toUpperCase()}</div>
+      <div class="v-row-2">
+        <div><span class="k">Starting Date</span><span class="v">${entry.start || '&mdash;'}</span></div>
+        <div><span class="k">Finishing Date</span><span class="v">${entry.end || '&mdash;'}</span></div>
+      </div>
+      <div class="v-row-2">
+        <div><span class="k">Agreed Rate</span><span class="v">${entry.rateLabel}</span></div>
+        <div><span class="k">TSH (Total)</span><span class="v">${fmt(entry.amt)}</span></div>
+      </div>
+      <div class="v-row"><div class="k">Signature Contractor</div><div class="v">&nbsp;</div></div>
+      <div class="v-row-2">
+        <div><span class="k">Estimated Days</span><span class="v">${estDays}</span></div>
+        <div><span class="k">Effective Mandays</span><span class="v">${entry.mandays}</span></div>
+      </div>
+      <div class="v-receipt">
+        <div class="v-receipt-title">Payment Received Contractor</div>
+        <div class="v-approve">FOR UTENGULE ESTATES TZ LTD</div>
+        <div class="v-row-2">
+          <div><span class="k">Signature</span><span class="v">&nbsp;</span></div>
+          <div><span class="k">Approved By</span><span class="v">&nbsp;</span></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderVoucher(){
+  const start = state.rangeStart, end = state.rangeEnd;
+  const breakdown = taskBreakdown(start, end);
+  if(!state.voucherTask || !breakdown.some(b=>b.task===state.voucherTask)){
+    state.voucherTask = breakdown.length ? breakdown[0].task : '';
+  }
+  const entry = breakdown.find(b=>b.task===state.voucherTask);
+
+  return `
+  <div class="panel">
+    <h2>Contract / Payment Voucher</h2>
+    <div class="hint">Built directly from the Task &amp; Plot Breakdown for the period below &mdash; pick a task to see its plots, mandays and total, laid out like the printed "UTENGULE ESTATES TZ L" contract slips.</div>
+    ${rangeControls('v')}
+    <div class="toolbar">
+      <label>Task
+        <select id="v-task">
+          ${breakdown.map(b=>`<option value="${b.task}" ${state.voucherTask===b.task?'selected':''}>${b.task}</option>`).join('') || '<option value="">No tasks in this period</option>'}
+        </select>
+      </label>
+      <button class="secondary no-print" id="btn-print-voucher">Print This Contract</button>
+      <button class="primary no-print" id="btn-print-all" style="margin-left:auto;">Print All Contract Receipts</button>
+    </div>
+    <div class="hint no-print">"Print All Contract Receipts" prints one slip per task in this period (${breakdown.length} on file), all under Contractor's Name: <b>${state.voucherContractor}</b>.</div>
+
+    <div class="v-row" style="max-width:560px;margin:0 auto 14px;border:1px solid var(--line);border-radius:6px;">
+      <div class="k">Contractor's Name</div>
+      <div class="v"><input class="field-input" id="v-contractor" value="${state.voucherContractor.replace(/"/g,'&quot;')}" placeholder="Enter contractor name"></div>
+    </div>
+
+    ${entry ? voucherBlockHTML(entry, state.voucherContractor) : `<div class="empty-state">No entries in this date range.</div>`}
+  </div>
+  `;
+}
+
+function printAllVouchers(){
+  const contractor = state.voucherContractor || 'Osfai Njenda';
+  const breakdown = taskBreakdown(state.rangeStart, state.rangeEnd);
+  // group 3 receipts per printed A4 sheet
+  const sheets = [];
+  for(let i=0; i<breakdown.length; i+=3){
+    sheets.push(breakdown.slice(i, i+3));
+  }
+  const blocks = sheets.map(group =>
+    `<div class="print-sheet">${group.map(entry=>voucherBlockHTML(entry, contractor)).join('')}</div>`
+  ).join('');
+
+  let container = document.getElementById('print-all-vouchers');
+  if(!container){
+    container = document.createElement('div');
+    container.id = 'print-all-vouchers';
+    document.body.appendChild(container);
+  }
+  container.innerHTML = blocks;
+  document.body.classList.add('printing-all');
+  window.print();
+  const cleanup = ()=>{
+    document.body.classList.remove('printing-all');
+    window.removeEventListener('afterprint', cleanup);
+  };
+  window.addEventListener('afterprint', cleanup);
+}
+
+// ---------- wiring ----------
+function wireTab(){
+  if(state.tab==='register'){
+    const dateEl = document.getElementById('f-date');
+    const taskEl = document.getElementById('f-task');
+    wireMs('workers'); wireMs('plots');
+
+    const scanToggle = document.getElementById('btn-scan-toggle');
+    const scanPanel = document.getElementById('scan-panel');
+    scanToggle.onclick = ()=>{
+      const open = !scanPanel.classList.contains('open');
+      scanPanel.classList.toggle('open', open);
+      if(open) startScan(); else stopScan();
+    };
+    document.getElementById('scan-instant').onchange = e=>{ state.scanInstant = e.target.checked; };
+    refreshScanLog();
+    document.getElementById('scan-manual').onkeydown = e=>{
+      if(e.key==='Enter'){
+        e.preventDefault();
+        const v = e.target.value; e.target.value = '';
+        scanFeedback(handleScan(v));
+      }
+    };
+
+    dateEl.onchange = e=>{ state.form.date = e.target.value; render(); };
+    taskEl.oninput = e=> state.form.task = e.target.value;
+    document.querySelectorAll('#f-salary input').forEach(inp=>{
+      inp.onchange = ()=>{ state.form.salary = Number(inp.value); render(); };
+    });
+    document.getElementById('btn-clear').onclick = ()=>{
+      state.form = { workers:[], workerInput:'', date: todayISO(), salary: 6000, task:'', plots:[] };
+      state.plotFilter = ''; state.msSearch = {workers:'',plots:''};
+      render();
+    };
+    document.getElementById('btn-submit').onclick = async ()=>{
+      const f = state.form;
+      const msg = document.getElementById('form-msg');
+      const workers = f.workers.slice();
+
+      if(!workers.length || !f.date || !f.task.trim() || !f.plots.length){
+        msg.innerHTML = `<div class="msg err">Please add at least one worker, and fill in Date, Task and at least one Plot.</div>`;
+        return;
+      }
+      const plotsStr = f.plots.join(', ');
+      const maxId = records.reduce((m,r)=>Math.max(m,r.id||0),0);
+      const newRecs = workers.map((wid,i)=>({
+        id: maxId + i + 1,
+        wid, name: (workerById(wid)||{name:wid}).name, date: f.date, day: dayName(f.date),
+        salary: Number(f.salary), task: f.task.trim(), plots: plotsStr,
+      }));
+      records.push(...newRecs);
+      await saveRecords();
+      state.form = { workers:[], workerInput:'', date: f.date, salary: f.salary, task:'', plots:[] };
+      state.plotFilter = ''; state.msSearch = {workers:'',plots:''};
+      render();
+      const addedNote = '';
+      document.getElementById('form-msg').innerHTML = `<div class="msg ok">Saved &ndash; ${newRecs.length} worker(s) logged for "${newRecs[0].task}" on ${newRecs[0].date} (${fmt(Number(f.salary)*newRecs.length)} TZS total).${addedNote}</div>`;
+    };
+  }
+  if(state.tab==='log'){
+    document.getElementById('log-month-sel').onchange = e=> setState({logMonth: e.target.value});
+    document.getElementById('log-search').oninput = e=> setState({logSearch: e.target.value});
+    document.getElementById('btn-export-log').onclick = ()=>{
+      const rows = [['Date','Day','ID','Name','Task','Plots','Salary']];
+      records.forEach(r=> rows.push([r.date, r.day||dayName(r.date), r.wid||'', r.name, r.task, r.plots, r.salary]));
+      downloadCsv('utengule-itimba-labor-log.csv', rows);
+    };
+    document.querySelectorAll('[data-del]').forEach(btn=>{
+      btn.onclick = async ()=>{
+        const id = Number(btn.dataset.del);
+        records = records.filter(r=>r.id!==id);
+        await saveRecords();
+        render();
+      };
+    });
+    document.getElementById('btn-export-backup').onclick = exportBackup;
+    document.getElementById('btn-import-backup').onchange = async (e)=>{
+      const file = e.target.files[0];
+      const msgEl = document.getElementById('import-msg');
+      if(!file) return;
+      try{
+        const {added, addedWorkers} = await importBackupFile(file);
+        msgEl.className = 'msg ok';
+        msgEl.textContent = `Imported: ${added} new entr${added===1?'y':'ies'}${addedWorkers? `, ${addedWorkers} new worker(s) added`:''}.`;
+        render();
+      }catch(err){
+        msgEl.className = 'msg err';
+        msgEl.textContent = 'Could not read that backup file.';
+      }
+    };
+  }
+  if(state.tab==='badges'){
+    wireNewWorker();
+    document.getElementById('badge-scope').onchange = e=> setState({badgeScope:e.target.value});
+    document.getElementById('badge-format').onchange = e=> setState({badgeFormat:e.target.value});
+    const bs = document.getElementById('badge-search');
+    bs.oninput = e=>{ state.badgeSearch = e.target.value; const pos = e.target.selectionStart; render(); const n = document.getElementById('badge-search'); n.focus(); n.setSelectionRange(pos,pos); };
+    document.getElementById('btn-print-badges').onclick = printBadges;
+  }
+  if(state.tab==='monthly'){
+    wireRangeControls('sum');
+    document.getElementById('btn-print-monthly').onclick = ()=> window.print();
+  }
+  if(state.tab==='tasks'){
+    wireRangeControls('task');
+    document.getElementById('btn-print-tasks').onclick = ()=> window.print();
+  }
+  if(state.tab==='voucher'){
+    wireRangeControls('v');
+    document.getElementById('v-task').onchange = e=> setState({voucherTask: e.target.value});
+    document.getElementById('v-contractor').oninput = e=> state.voucherContractor = e.target.value;
+    document.getElementById('btn-print-voucher').onclick = ()=> window.print();
+    document.getElementById('btn-print-all').onclick = ()=> printAllVouchers();
+  }
+}
+
+// ---------- boot ----------
+(async function(){
+  app.innerHTML = `<div class="empty-state"><div class="big">☕</div>Loading labor register&hellip;</div>`;
+  await loadRecords();
+  await loadExtraWorkers();
+  render();
+})();
+
+
+</script>
+</body>
+</html>
